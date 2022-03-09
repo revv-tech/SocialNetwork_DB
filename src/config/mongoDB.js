@@ -1,9 +1,8 @@
+
+const mongoose			= require('mongoose');
 // Mongo Database Connector
-const mongose = require('mongoose');
-mongose.connect('mongodb://localhost/socialnetworkdb', {
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useFindAndModify: false
-})
-    .then(db => console.log('MongoDB is connected'))
-    .catch(err => console.error(err));
+mongoose.connect("mongodb+srv://admin:1234@socialnetworkcluster.hrcpl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+	useNewUrlParser: true
+}).then (() =>{
+	console.log("Database Connected");
+}).catch((err)=>console.log('Database not connected'+err));

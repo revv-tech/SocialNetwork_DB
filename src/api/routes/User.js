@@ -1,22 +1,16 @@
+// RUTAS PARA USUARIOS
+
 const express = require('express');
 const router = express.Router();
-
-
 
 // Password handler
 const bcrypt = require('bcryptjs');
 
-// Sign up
-router.post('/signup', (req, res) => {
-    
-    
+// Log in 
+router.post('/login', (req, res) => res.send('Log in'));
 
-})
-
-// Sign in
-router.post('/signin', (req, res) => {
-
-})
+// Register
+router.post('/register', (req, res) => res.send('Register'));
 
 
 module.exports = router;

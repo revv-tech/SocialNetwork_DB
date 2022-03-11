@@ -3,10 +3,14 @@ require('./src/config/mongoDB');
 const app           = require('express')();
 const port          = 5000;
 
-
+// Layouts
+const expressLayouts = require('express-ejs-layouts');
+app.set('view engine', 'ejs');
 // App Routes
-// Register - Log in
+// Welcome page
 app.use('/users',require('./src/api/routes/User'));
+// Register - Log in
+app.use('/',require('./src/api/routes/Index'));
 
 // For acepting post form data
 const bodyParser    =require('express').json;

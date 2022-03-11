@@ -5,4 +5,4 @@ mongoose.connect("mongodb+srv://admin:1234@socialnetworkcluster.hrcpl.mongodb.ne
 	useNewUrlParser: true
 }).then (() =>{
 	console.log("Database Connected");
-}).catch((err)=>console.log('Database not connected'+err));
+}).catch((err)=>console.log('Mongo Database not connected'+err));

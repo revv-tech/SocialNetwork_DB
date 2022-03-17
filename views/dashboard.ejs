@@ -1,3 +1,8 @@
-<h1 class="mt-4">Dashboard</h1>
+<h1 class="mt-4">Feed</h1>
 <p class="lead mb-3">Welcome <%= user.name %></p>
-<a href="/User/logout" class="btn btn-secondary">Logout</a>
+<img src= <%= user.image %> img/>
+<p class="lead mb-3">Description </p>
+<p> <%= user.description %></p>
+<a href="/User/register" class="btn btn-primary btn-block mb-2"
+          >Settings</a>
+<a href="/User/logout" class="btn btn-secondary btn-block mb-2">Logout</a>

@@ -1,8 +1,9 @@
+const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 
 // Load User model
-const User = require('../models/UserMongoDB');
+const User = require('../model/UserMongoDB');
 
 module.exports = function(passport) {
   passport.use(

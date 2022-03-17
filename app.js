@@ -1,12 +1,13 @@
 // Mongo Config
 const mongoDB       = require('./src/config/mongoDB');
 const express       = require('express');
-const app           = require('express')();
+const app           = express();
 const port          = 5000;
 const passport      = require('passport');
 const flash         = require('connect-flash');
 const session       = require('express-session');
-
+// Passport Config
+require('./src/config/passport')(passport);
 // Layouts
 const expressLayouts = require('express-ejs-layouts');
 app.set('view engine', 'ejs');
@@ -25,10 +26,12 @@ app.use(
       resave: true,
       saveUninitialized: true
     })
-  );
+);
+
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // Connect flash
 app.use(flash());

@@ -1,3 +1,4 @@
+const { contentType } = require('express/lib/response');
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -17,9 +18,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     isPrivate: true
   },
-  dateBirth: {
+  date: {
     type: Date,
     isPrivate: false
+  },
+  image: {
+    type: Buffer,
+    isPrivate: true,
+    contentType: String
   },
   interests: {
     type: [String],

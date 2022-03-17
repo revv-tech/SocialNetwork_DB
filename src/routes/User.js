@@ -1,23 +1,20 @@
 // RUTAS PARA USUARIOS
 
-const express = require('express');
-const router = express.Router();
-
-// User model
-const User = require('../model/UserMongoDB');
-
+const express       = require('express');
+const router        = express.Router();
+const passport      = require('passport');
 // Password handler
-const bcrypt = require('bcryptjs');
-
+const bcrypt        = require('bcryptjs');
+// User model
+const User          = require('../model/UserMongoDB');
 // Log in 
 router.get('/login', (req, res) => res.render('login'));
-
 // Register
 router.get('/register', (req, res) => res.render('register'));
 // Register Handle
 router.post('/register', (req, res) =>{
     console.log(req.body)
-    const { name, email, password, password2, description, dateBirth} = req.body;
+    const { name, email, password, password2, description, date, image} = req.body;
     let errors = [];
   
     if (!name || !email || !password || !password2 || !description) {
@@ -50,7 +47,8 @@ router.post('/register', (req, res) =>{
             email,
             password,
             description,
-            dateBirth
+            date,
+            image
           });
         } else {
           const newUser = new User({
@@ -58,7 +56,8 @@ router.post('/register', (req, res) =>{
             email,
             password,
             description,
-            dateBirth
+            date,
+            image
           });
   
           bcrypt.genSalt(10, (err, salt) => {
@@ -81,5 +80,25 @@ router.post('/register', (req, res) =>{
       });
     }
   });
+// Login
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/User/login',
+    failureFlash: true
+  })(req, res, next);
+});
+// Logout
+router.get('/logout', (req, res) => {
+  req.logout();
+  req.flash('success_msg', 'You are logged out');
+  res.redirect('/User/login');
+});
+// Update
+
+// Delete User
+// Add friend
+// Delete Friend
+
 
 module.exports = router;

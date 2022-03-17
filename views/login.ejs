@@ -2,7 +2,7 @@
     <div class="col-md-6 m-auto">
       <div class="card card-body">
         <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i>  Login</h1>
-        
+        <% include ("./messages"); %>
         <form action="/User/login" method="POST">
           <div class="form-group">
             <label for="email">Email</label>
@@ -29,7 +29,7 @@
           
         </form>
         <p class="lead mt-4">
-          No Account? <a href="/users/register">Register</a>
+          No Account? <a href="/User/register">Register</a>
         </p>
       </div>
     </div>

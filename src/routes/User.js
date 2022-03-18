@@ -14,7 +14,7 @@ router.get('/register', (req, res) => res.render('register'));
 // Register Handle
 router.post('/register', (req, res) =>{
     console.log(req.body)
-    const { name, email, password, password2, description, date, image} = req.body;
+    const { name, email, password, password2, description, date, image, hoobies, interests} = req.body;
     let errors = [];
   
     if (!name || !email || !password || !password2 || !description) {
@@ -48,7 +48,9 @@ router.post('/register', (req, res) =>{
             password,
             description,
             date,
-            image
+            image,
+            hoobies,
+            interests
           });
         } else {
           const newUser = new User({
@@ -57,7 +59,9 @@ router.post('/register', (req, res) =>{
             password,
             description,
             date,
-            image
+            image,
+            hoobies,
+            interests
           });
   
           bcrypt.genSalt(10, (err, salt) => {

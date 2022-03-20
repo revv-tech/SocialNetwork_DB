@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -21,9 +22,8 @@
 
     <!-- NAME FORM -->
     <form class="form-floating">
-      <h5 for="mailLabel">Your email is: <%= user.mail %></h5>
       
-        <input type="text" class="form-control" id="floatingInputValue" placeholder="New Name" value="Marco Reveiz">
+        <input type="text" class="form-control" id="floatingInputValue" placeholder="newName" value= <%= user.name %>>
         <label for="floatingInputValue">Your Name</label>
         <p></p>
         <p></p>
@@ -31,8 +31,7 @@
       </form>
     <!-- EMAIL FORM -->
     <form class="form-floating">
-        
-        <input type="email" class="form-control" id="floatingInputValue" placeholder="name@example.com" value="">
+        <input type="email" class="form-control" id="floatingInputValue" placeholder="name@example.com" value=<%= user.email %> disabled readonly>
         <label for="floatingInputValue">Your email</label>
     </form>
     <div class="mb-3 form-check">
@@ -41,37 +40,55 @@
     </div>
     <!-- PASSWORD FORM -->
     <div class="mb-3 row">
-        <h2 for="staticPassword" class="col-sm-2 col-form-label">Old Password: </h2>
+      <h2 for="newPassword" class="col-sm-2 col-form-label">New Password: </h2>
         
-        <div class="col-sm-10">
-          <input type="text" readonly class="form-control-plaintext" id="staticPassword" value="password">
-        </div>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="inputPassword">
+      </div>
       </div>
       <div class="mb-3 row">
-        <h2 for="newPassword" class="col-sm-2 col-form-label">New Password: </h2>
+        <h2 for="newPassword2" class="col-sm-2 col-form-label">Confirm New Password: </h2>
         <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword">
+          <input type="password" class="form-control" id="inputPassword2">
         </div>
       </div>
     <!-- Description FORM -->
       <div class="form-floating">
-        <textarea class="form-control" placeholder="Leave a description here"  id="floatingTextarea2" style="height: 100px"></textarea>
+        <input type="text" class="form-control" id="floatingInputValue" placeholder="name@example.com" value=<%= user.description %>>
         <label for="floatingTextarea2">Description</label>
         <p></p>
         <p></p>
         <p></p>
       </div>
     <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="isPublicDescrip">
+        <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
         <label class="form-check-label" for="isPublicDescrip">Set your description public</label>
     </div>
+    <p></p>
+    <p></p>
+    <p></p>
+    
+    <!-- DATE FORM -->
+    <h5 class="form-check-label" for="isPublicDescrip">Change your birth date: </h5>
+    <p></p>
+    <p></p>
+    <p></p>
+    <input type="date" alue=<%= user.date %>>
+    <p></p>
+    <p></p>
+    <p></p>
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
+      <label class="form-check-label" for="isPublicDescrip">Set your birth date public</label>
+    </div>
+    
     <!-- New Hoobies -->
         <p></p>
         <p></p>
         <p></p>
     <h5 for="Hoobies">Select your favorite hoobies (Ctrl + click)!</h5>
-      
-    <select class="form-select" multiple aria-label="newHoobies">
+
+    <select class="form-select" multiple aria-label="newHoobies" id="hoobiesSelect">
             <option value="Sports">Sports </option>
             <option value="Gym">Gym</option>
             <option value="Art">Art</option>
@@ -82,6 +99,17 @@
             <option value="Video Games">Video Games</option>
             <option value="Reading">Reading</option>
     </select>
+    <script>
+      var userHoobies = user.hoobies;
+      var select = document.getElementById("hoobiesSelect");
+      for(var i=0; i < select.options.length; i++) {
+        for(var i=0; i < userHoobies.length; i++) {
+          if (select.options[i] == userHoobies[i]){
+            select.options[i].selected = true;
+          }
+        }
+      }
+    </script>
     <div class="mb-3 form-check">
         <input type="checkbox" class="form-check-input" id="isPublicHoobie">
         <label class="form-check-label" for="isPublicHoobie">Set your hoobies public</label>

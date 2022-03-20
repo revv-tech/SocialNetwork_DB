@@ -1,0 +1,32 @@
+<h1>Mensajes</h1>
+
+<ul>
+    {{#each mensajes}}
+    {{#if (filterChat receptor remitente _receptor _remitente)}}
+    <li>
+        <h3>{{remitente}} {{mensaje}}</h3>
+        <p>{{prettifyDate fecha}}</p>
+
+        <a href="/delete-message/{{id}}">Borrar</a>
+        
+        <a href="/edit-message/{{id}}">Editar</a>
+       
+    </li>
+    {{/if}}
+    {{/each}}
+</ul>
+
+<form action="{{#unless mensaje.id}}/new-message{{else}}/update-message/{{mensaje.id}}{{/unless}}" method="POST">
+
+
+<div>
+    <label for="mensaje">Mensaje</label>
+    <input type="text" name="mensaje" placeholder="Mensaje" id="mensaje" value="{{mensaje.mensaje}}">
+</div>
+
+<div>
+    <button>Enviar</button>
+</div>
+    
+
+</form>

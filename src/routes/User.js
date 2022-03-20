@@ -11,6 +11,7 @@ const User          = require('../model/UserMongoDB');
 router.get('/login', (req, res) => res.render('login'));
 // Register
 router.get('/register', (req, res) => res.render('register'));
+
 // Register Handle
 router.post('/register', (req, res) =>{
     console.log(req.body)
@@ -98,11 +99,9 @@ router.get('/logout', (req, res) => {
   req.flash('success_msg', 'You are logged out');
   res.redirect('/User/login');
 });
-// Update
 
-// Delete User
-// Add friend
-// Delete Friend
+
+
 
 
 module.exports = router;

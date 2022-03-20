@@ -81,3 +81,7 @@ app.use('/User',require('./src/routes/User'));
 app.listen(port, function()  {
     console.log(`Server running on port: ${port}`);
 });
+// PATH STEVEN
+// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\USER\OneDrive\Escritorio\Message-Firebase\firebase.json
+// PATH Marco
+// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\Message-Firebase\firebase.json

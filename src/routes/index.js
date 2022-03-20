@@ -16,13 +16,11 @@ router.get('/', (req, res) => res.render('welcome'));
 
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => res.render('dashboard', { user: req.user }) );
-
+// Settings
+router.get('/settings', ensureAuthenticated, (req, res) => res.render('settings.ejs', { user: req.user }) );
 
 //Agregado Steven
-router.get('/chats', (req, res) => {
-
-    res.render('chats.hbs')
-})
+router.get('/chats', ensureAuthenticated,(req, res) =>  res.render('chats.hbs', { user: req.user }) );
 
 
 router.get('/conversation', async (req, res) => {
@@ -69,7 +67,6 @@ router.post('/new-message', async (req, res) =>{
 
 router.get('/edit-message/:id', async (req, res) =>{
     const doc = await db.collection("Mensajes").doc(req.params.id).get();
-
    res.render('index.hbs', {mensaje: {id: doc.id, ...doc.data()}});
 });
 
@@ -87,3 +84,4 @@ router.post('/update-message/:id', async (req, res) =>{
 // Fin Steven
 
 module.exports = router;
+

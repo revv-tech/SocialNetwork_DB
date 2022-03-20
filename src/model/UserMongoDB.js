@@ -3,37 +3,53 @@ const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
   name: {
-    type: String,
-    isPrivate: false
+    type: String
   },
   email: {
     type: String,
-    isPrivate: false
+  },
+  emailPrivate: {
+    type: Boolean,
+    default: true
   },
   password: {
-    type: String,
-    isPrivate: true
+    type: String
   },
   description: {
-    type: String,
-    isPrivate: true
+    type: String
+  },
+  descriptionPrivate: {
+    type: Boolean,
+    default: true
   },
   date: {
-    type: Date,
-    isPrivate: false
+    type: String
+  },
+  datePrivate: {
+    type: Boolean,
+    default: true
   },
   image: {
     type: Buffer,
-    isPrivate: true,
     contentType: String
   },
+  imagePrivate: {
+    type: Boolean,
+    default: true
+  },
   interests: {
-    type: [String],
-    isPrivate: false
+    type: [String]
+  },
+  interestsPrivate: {
+    type: Boolean,
+    default: true
   },
   hoobies: {
-    type: [String],
-    isPrivate: false
+    type: [String]
+  },
+  hoobiesPrivate: {
+    type: Boolean,
+    default: true
   }
 });
 

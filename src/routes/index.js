@@ -6,7 +6,7 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 //Agregado Steven
 const User          = require('../model/UserMongoDB');
 const { db } = require('../firebase');
-const _remitente = "Marco Reveiz"
+var _remitente = ""
 var _receptor = ""
 var _numMensajes = 0
 // Fin Steven
@@ -20,7 +20,12 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => res.render('dashboar
 router.get('/settings', ensureAuthenticated, (req, res) => res.render('settings.ejs', { user: req.user }) );
 
 //Agregado Steven
-router.get('/chats', ensureAuthenticated,(req, res) =>  res.render('chats.hbs', { user: req.user }) );
+router.get('/chats', ensureAuthenticated, (req, res) => {
+    _remitente = req.user.name;
+    console.log(req.user.name);
+    res.render('chats.ejs', { user: req.user })
+});
+
 
 
 router.get('/conversation', async (req, res) => {
@@ -84,4 +89,3 @@ router.post('/update-message/:id', async (req, res) =>{
 // Fin Steven
 
 module.exports = router;
-

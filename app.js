@@ -1,3 +1,21 @@
+// MySQL Config
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host: 'localhost',
+    database: 'project_bdii',
+    user: 'root',
+    password: '123'
+});
+
+connection.connect(function(error){
+    if(error){
+        throw error;
+    } else{
+        console.log('Successfully Connecte to MySQL');
+    }
+});
+
+
 // Mongo Config
 const mongoDB       = require('./src/config/mongoDB');
 const express       = require('express');

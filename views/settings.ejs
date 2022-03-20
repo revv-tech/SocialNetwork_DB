@@ -23,19 +23,24 @@
     <!-- NAME FORM -->
     <form class="form-floating">
       
-        <input type="text" class="form-control" id="floatingInputValue" placeholder="newName" value= <%= user.name %>>
-        <label for="floatingInputValue">Your Name</label>
+        <input type="text" class="form-control" id="nameInput" placeholder="New Name" value= "">
+        <label for="floatingInputValue"><%= user.name %></label>
         <p></p>
         <p></p>
         <p></p>
       </form>
     <!-- EMAIL FORM -->
     <form class="form-floating">
-        <input type="email" class="form-control" id="floatingInputValue" placeholder="name@example.com" value=<%= user.email %> disabled readonly>
+        <input type="email" class="form-control" id="mailInput" placeholder="name@example.com" value=<%= user.email %> disabled readonly>
         <label for="floatingInputValue">Your email</label>
     </form>
     <div class="mb-3 form-check">
         <input type="checkbox" class="form-check-input" id="isPublicEmail">
+        <% if (user.emailPrivate) {%>
+          <input type="checkbox" class="form-check-input" id="isPublicEmail" checked>
+        <% } else { %>
+          <input type="checkbox" class="form-check-input" id="isPublicEmail" >
+          <% } %>
         <label class="form-check-label" for="isPublicEmail">Set your email public</label>
     </div>
     <!-- PASSWORD FORM -->
@@ -54,15 +59,21 @@
       </div>
     <!-- Description FORM -->
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingInputValue" placeholder="name@example.com" value=<%= user.description %>>
-        <label for="floatingTextarea2">Description</label>
+        
+        <input type="text" class="form-control" id="descriptionINPUT" placeholder="New Description" value="">
+        <label for="floatingTextarea2"><%= user.description %></label>
         <p></p>
         <p></p>
         <p></p>
       </div>
     <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
-        <label class="form-check-label" for="isPublicDescrip">Set your description public</label>
+        
+        <% if (user.descriptionPrivate) {%>
+          <input type="checkbox" class="form-check-input" id="isPublicDescrip" checked>
+        <% } else { %>
+          <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
+          <% } %>
+        <label class="form-check-label" for="isPublicEmail">Set your email public</label>
     </div>
     <p></p>
     <p></p>
@@ -73,12 +84,16 @@
     <p></p>
     <p></p>
     <p></p>
-    <input type="date" alue=<%= user.date %>>
+    <input type="date" id="dateInput" value=<%= user.date %> >
     <p></p>
     <p></p>
     <p></p>
     <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
+      <% if (user.datePrivate) {%>
+        <input type="checkbox" class="form-check-input" id="isPublicDate" checked>
+      <% } else { %>
+        <input type="checkbox" class="form-check-input" id="isPublicDate" >
+        <% } %>
       <label class="form-check-label" for="isPublicDescrip">Set your birth date public</label>
     </div>
     
@@ -111,7 +126,12 @@
       }
     </script>
     <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="isPublicHoobie">
+        
+        <% if (user.hoobiesPrivate) {%>
+          <input type="checkbox" class="form-check-input" id="isPublicHoobie" checked>
+        <% } else { %>
+          <input type="checkbox" class="form-check-input" id="isPublicHoobie" >
+          <% } %>
         <label class="form-check-label" for="isPublicHoobie">Set your hoobies public</label>
     </div>
     <!-- New Interests -->
@@ -120,7 +140,7 @@
         <p></p>
     <h5 for="Interests">Select your favorite interests (Ctrl + click)!</h5>
 
-    <select class="form-select" multiple aria-label="newInterests">
+    <select class="form-select" multiple aria-label="newInterests" id="newInterests">
 
         <option value="Health" selected>Health</option>
         <option value="Fitness">Fitness</option>
@@ -136,7 +156,13 @@
 
     </select>
     <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="isPublicInterests">
+        
+        <% if (user.interestsPrivate) {%>
+          <input type="checkbox" class="form-check-input" id="isPublicInterests" checked>
+        <% } else { %>
+          <input type="checkbox" class="form-check-input" id="isPublicInterests" >
+          <% } %>
+        <label class="form-check-label" for="isPublicHoobie">Set your hoobies public</label>
         <label class="form-check-label" for="isPublicInterests">Set your interests public</label>
     </div>
     <!-- Image uploader -->
@@ -148,13 +174,18 @@
         <input class="form-control form-control-lg" id="formFileLg" type="file">
     </div>
     <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="isPublicImage">
+        
+        <% if (user.imagePrivate) {%>
+          <input type="checkbox" class="form-check-input" id="isPublicImage" checked>
+        <% } else { %>
+          <input type="checkbox" class="form-check-input" id="isPublicImage" >
+          <% } %>
         <label class="form-check-label" for="isPublicImage">Set your profile picture public</label>
     </div>
     <p></p>
     <p></p>
     <p></p>
-    
+    <a href="/settings" class="btn btn-primary btn-block mb-2">Update data</a>
     <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
       
   </body>

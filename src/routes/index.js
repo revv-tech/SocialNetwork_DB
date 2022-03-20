@@ -16,26 +16,27 @@ router.get('/', (req, res) => res.render('welcome'));
 
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => res.render('dashboard', { user: req.user }) );
-// Fin Steven
-router.post('/update-message/:id', async (req, res) =>{
-router.get('/delete-message/:id', async (req, res) =>{
-router.get('/edit-message/:id', async (req, res) =>{
-router.post('/new-message', async (req, res) =>{
+// Settings
+router.get('/settings', ensureAuthenticated, (req, res) => res.render('settings.ejs', { user: req.user }) );
+
+//Agregado Steven
+router.get('/chats', ensureAuthenticated,(req, res) =>  res.render('chats.hbs', { user: req.user }) );
+
+
 router.get('/conversation', async (req, res) => {
-router.get('/chats', (req, res) => {
     const querySnapshot = await db.collection('Mensajes').get();
     _numMensajes = querySnapshot.size + 1;
     _receptor = req.query.receptor
 
     if(_receptor == _remitente)
     res.redirect('/chats')
-    User.findOne({name: _receptor}).then(name => {
 
+    User.findOne({name: _receptor}).then(name => {
         console.log(name)
         if (name){
             const mensajes = querySnapshot.docs.map(doc => ({
-                ...doc.data(),
                 id: doc.id,
+                ...doc.data(),
                 _receptor,
                 _remitente,
             }));
@@ -49,41 +50,38 @@ router.get('/chats', (req, res) => {
 
 });
 
-    const _timeStamp = Date.now()
+router.post('/new-message', async (req, res) =>{
 
+    const _timeStamp = Date.now()
     const { mensaje, remitente = _remitente, receptor = _receptor, fecha = _timeStamp, numero = _numMensajes} = req.body
 
     await db.collection('Mensajes').add({
         remitente: remitente,
         mensaje: mensaje,
-        fecha: fecha,
         receptor: receptor,
+        fecha: fecha,
         numero: numero,
+    });
     res.redirect('/conversation?receptor=' + _receptor);
 });
-    });
 
-
-    res.render('chats.hbs')
-})
-
-
-//Agregado Steven
+router.get('/edit-message/:id', async (req, res) =>{
     const doc = await db.collection("Mensajes").doc(req.params.id).get();
    res.render('index.hbs', {mensaje: {id: doc.id, ...doc.data()}});
-
 });
 
+router.get('/delete-message/:id', async (req, res) =>{
     await db.collection("Mensajes").doc(req.params.id).delete();
     res.redirect('/conversation?receptor=' + _receptor);
 });
 
+router.post('/update-message/:id', async (req, res) =>{
     const { id } = req.params;
 
     await db.collection('Mensajes').doc(id).update(req.body);
     res.redirect('/conversation?receptor=' + _receptor);
-
 });
-router.get('/settings', ensureAuthenticated, (req, res) => res.render('settings.ejs', { user: req.user }) );
-// Settings
+// Fin Steven
+
 module.exports = router;
+

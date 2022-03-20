@@ -1,5 +1,4 @@
 // RUTAS GENERALES
-
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
@@ -20,13 +19,13 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
     
 });
 // Settings
-router.get('/settings', ensureAuthenticated, (req, res) => {
+router.get('/settings', ensureAuthenticated,  (req, res) => {
     
-    console.log(req.user.email.isPrivate);
+    
     const { nameInput, mailInput, inputPassword, inputPassword2, descriptionINPUT, dateInput} = req.body;
-    
+    console.log(req.body);
     if (nameInput){
-        console.log(nameInput);
+        console.log(req.body);
         
     }
     if (mailInput){
@@ -47,10 +46,9 @@ router.get('/settings', ensureAuthenticated, (req, res) => {
             name: " Steven Granados Vargas"
         }
     }).then(
-    
         res.render('settings.ejs', { user: req.user })
     );
-   
+    
 
 });
 

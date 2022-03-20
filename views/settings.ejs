@@ -23,8 +23,8 @@
     <!-- NAME FORM -->
     <form class="form-floating">
       
-        <input type="text" class="form-control" id="nameInput" placeholder="New Name" value= "">
-        <label for="floatingInputValue"><%= user.name %></label>
+        <input type="text" class="form-control" id="nameInput" placeholder="New Name" value= "<%= user.name %>">
+        <label for="floatingInputValue">Your name</label>
         <p></p>
         <p></p>
         <p></p>
@@ -33,51 +33,49 @@
     <form class="form-floating">
         <input type="email" class="form-control" id="mailInput" placeholder="name@example.com" value=<%= user.email %> disabled readonly>
         <label for="floatingInputValue">Your email</label>
+        <p></p>
+        <p></p>
+        <p></p>
     </form>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="isPublicEmail">
-        <% if (user.emailPrivate) {%>
-          <input type="checkbox" class="form-check-input" id="isPublicEmail" checked>
-        <% } else { %>
-          <input type="checkbox" class="form-check-input" id="isPublicEmail" >
-          <% } %>
-        <label class="form-check-label" for="isPublicEmail">Set your email public</label>
+
+    <!-- Description FORM -->
+    <div class="form-floating">
+        
+      <input type="text" class="form-control" id="descriptionINPUT" placeholder="New Description" value="<%= user.description %>">
+      <label for="floatingTextarea2">Description</label>
+      <p></p>
+      <p></p>
+      <p></p>
     </div>
+  <div class="mb-3 form-check">
+      <% if (user.descriptionPrivate) {%>
+        <input type="checkbox" class="form-check-input" id="isPublicDescrip" checked>
+      <% } else { %>
+        <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
+        <% } %>
+      <label class="form-check-label" for="isPublicEmail">Set your email public</label>
+  </div>
+  <p></p>
+  <p></p>
+  <p></p>
     <!-- PASSWORD FORM -->
     <div class="mb-3 row">
       <h2 for="newPassword" class="col-sm-2 col-form-label">New Password: </h2>
         
       <div class="col-sm-10">
-        <input type="password" class="form-control" id="inputPassword">
+        <input type="password" class="form-control" id="inputPassword" value="<%= typeof inputPassword != 'undefined' ? inputPassword2 : '' %>">
       </div>
       </div>
       <div class="mb-3 row">
         <h2 for="newPassword2" class="col-sm-2 col-form-label">Confirm New Password: </h2>
         <div class="col-sm-10">
-          <input type="password" class="form-control" id="inputPassword2">
+          <input type="password" class="form-control" id="inputPassword2" value="<%= typeof inputPassword2 != 'undefined' ? inputPassword2 : '' %>">
         </div>
+        <p></p>
+        <p></p>
+        <a href="/settings" class="btn btn-primary btn-block mb-2">Update password</a>
       </div>
-    <!-- Description FORM -->
-      <div class="form-floating">
-        
-        <input type="text" class="form-control" id="descriptionINPUT" placeholder="New Description" value="">
-        <label for="floatingTextarea2"><%= user.description %></label>
-        <p></p>
-        <p></p>
-        <p></p>
-      </div>
-    <div class="mb-3 form-check">
-        
-        <% if (user.descriptionPrivate) {%>
-          <input type="checkbox" class="form-check-input" id="isPublicDescrip" checked>
-        <% } else { %>
-          <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
-          <% } %>
-        <label class="form-check-label" for="isPublicEmail">Set your email public</label>
-    </div>
-    <p></p>
-    <p></p>
-    <p></p>
+    
     
     <!-- DATE FORM -->
     <h5 class="form-check-label" for="isPublicDescrip">Change your birth date: </h5>
@@ -103,17 +101,22 @@
         <p></p>
     <h5 for="Hoobies">Select your favorite hoobies (Ctrl + click)!</h5>
 
-    <select class="form-select" multiple aria-label="newHoobies" id="hoobiesSelect">
-            <option value="Sports">Sports </option>
-            <option value="Gym">Gym</option>
-            <option value="Art">Art</option>
-            <option value="Surf">Surf</option>
-            <option value="Movies">Movies</option>
-            <option value="Photography">Photography</option>
-            <option value="Art">Art</option>
-            <option value="Video Games">Video Games</option>
-            <option value="Reading">Reading</option>
-    </select>
+    <div>
+      <select class="form-select" multiple aria-label="newHoobies" id="hoobiesSelect">
+        <% var options = ["Sports", "Gym","Art", "Surf", "Movies", "Photography", "Video Games", "Reading"]; %>
+        <% var userDefault = user.hoobies; %>
+        
+        <% for(var i = 0; i < options.length; i++) { %>
+          <% if (userDefault.includes( options[i])){ %>
+            <option value='<%= options[i] %>' selected> <%= options[i] %>  </option>
+          <% } else {%>
+            <option value='<%= options[i] %>'> <%= options[i] %>  </option>
+          <% }%>
+      
+        <% } %>
+      </select>
+    </div>
+    
     <script>
       var userHoobies = user.hoobies;
       var select = document.getElementById("hoobiesSelect");
@@ -139,22 +142,24 @@
         <p></p>
         <p></p>
     <h5 for="Interests">Select your favorite interests (Ctrl + click)!</h5>
+    <div>
+      <select class="form-select" multiple aria-label="newInterests" id="newInterests">
 
-    <select class="form-select" multiple aria-label="newInterests" id="newInterests">
-
-        <option value="Health" selected>Health</option>
-        <option value="Fitness">Fitness</option>
-        <option value="Languages">Languages</option>
-        <option value="Food">Food</option>
-        <option value="Literature">Literature</option>
-        <option value="Religion">Religion</option>
-        <option value="Fashion">Fashion</option>
-        <option value="Technology">Technology</option>
-        <option value="Party">Party</option>
-        <option value="Bars">Bars</option>
-        <option value="Travel">Travel</option>
+        <% var options = ["Health", "Fitness","Languages", "Food", "Religion", "Fashion", "Technology", "Party", "Bars", "Travel"]; %>
+        <% var userDefault = user.interests; %>
+        
+        <% for(var i = 0; i < options.length; i++) { %>
+          <% if (userDefault.includes( options[i])){ %>
+            <option value='<%= options[i] %>' selected> <%= options[i] %>  </option>
+          <% } else {%>
+            <option value='<%= options[i] %>'> <%= options[i] %>  </option>
+          <% }%>
+      
+        <% } %>
 
     </select>
+    </div>
+  
     <div class="mb-3 form-check">
         
         <% if (user.interestsPrivate) {%>

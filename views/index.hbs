@@ -7,9 +7,9 @@
         <h3>{{remitente}} {{mensaje}}</h3>
         <p>{{prettifyDate fecha}}</p>
 
-        <a href="/delete-message/{{id}}">Borrar</a>
+        <a href="/delete-message/{{id}}" class="btn btn-primary btn-block mb-2">Borrar</a>
         
-        <a href="/edit-message/{{id}}">Editar</a>
+        <a href="/edit-message/{{id}}" class="btn btn-primary btn-block mb-2">Editar</a>
        
     </li>
     {{/if}}
@@ -20,12 +20,16 @@
 
 
 <div>
-    <label for="mensaje">Mensaje</label>
-    <input type="text" name="mensaje" placeholder="Mensaje" id="mensaje" value="{{mensaje.mensaje}}">
+    <label for="mensaje">Write your message: </label>
+    <p></p>
+    <!---<input type="text" name="mensaje" placeholder="Mensaje" id="mensaje" value="{{mensaje.mensaje}}" size="160">-->
+    <input type="text" class="form-control"  name="mensaje" value="{{mensaje.mensaje}}" id="mensaje" placeholder="Message" >
 </div>
 
 <div>
-    <button>Enviar</button>
+     <p></p>
+    <button class="btn btn-primary btn-block mb-2"> Send</button>
+    <a href="/chats" class="btn btn-secondary btn-block">Back to chats</a>
 </div>
     
 

@@ -78,6 +78,10 @@ app.use('/',require('./src/routes/index'));
 // Users
 app.use('/User',require('./src/routes/User'));
 
+//ne4j
+app.use('/user',require('./src/routes/neo4j_user'));
+app.use('/friends',require('./src/routes/friendship'));
+
 app.listen(port, function()  {
     console.log(`Server running on port: ${port}`);
 });
@@ -85,3 +89,5 @@ app.listen(port, function()  {
 // GOOGLE_APPLICATION_CREDENTIALS= C:\Users\USER\OneDrive\Escritorio\Message-Firebase\firebase.json
 // PATH Marco
 // GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\Message-Firebase\firebase.json
+// PATH jarod
+// GOOGLE_APPLICATION_CREDENTIALS= /home/jarod/Documents/TEC/BD II/Proyectos/SocialNetwork_DB/firebase.json

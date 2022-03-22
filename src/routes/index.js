@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts} = require('../dbaccess/mysql_data');
 //Agregado Steven
 const User          = require('../model/UserMongoDB');
 const { db } = require('../firebase');
@@ -123,5 +124,11 @@ router.post('/update-message/:id', async (req, res) =>{
     res.redirect('/conversation?receptor=' + _receptor);
 });
 // Fin Steven
+
+// Posts
+router.get('/posts', ensureAuthenticated, (req, res) => {
+    id_user = req.user.id;
+    res.render('posts.ejs', { user: req.user })
+});
 
 module.exports = router;

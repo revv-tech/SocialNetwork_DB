@@ -1,3 +1,6 @@
+//MySQL Config
+const mysqlDB= require('./src/config/mysqlDB');
+
 // Mongo Config
 const mongoDB       = require('./src/config/mongoDB');
 const express       = require('express');
@@ -91,3 +94,5 @@ app.listen(port, function()  {
 // GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\Message-Firebase\firebase.json
 // PATH jarod
 // GOOGLE_APPLICATION_CREDENTIALS= /home/jarod/Documents/TEC/BD II/Proyectos/SocialNetwork_DB/firebase.json
+// PATH Fabian
+// GOOGLE_APPLICATION_CREDENTIALS= D:\Datos\Documents\Estudios\TEC\Semestre VII\Bases de Datos II\Proyecto 1\SocialNetwork_DB\firebase.json

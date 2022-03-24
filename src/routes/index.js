@@ -2,6 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newImage, newVideo, newDocument, newUser, newPost} = require('../dbaccess/mysql_data');
+const storage = require('../config/multer');
+const multer = require('multer');
+const uploader = multer({storage});
+
 //Agregado Steven
 const User          = require('../model/UserMongoDB');
 const { db } = require('../firebase');
@@ -13,68 +18,10 @@ var _numMensajes = 0
 // Welcome Page
 router.get('/', (req, res) => res.render('welcome'));
 // Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) => {  res.render('dashboard', { user: req.user });   });
-// Settings
-router.get('/settings', ensureAuthenticated,  (req, res) => { 
-    console.log(req.user);
-    res.render('settings.hbs', { 
-        user: req.user,
-        options: ["Sports", "Gym","Art", "Surf", "Movies", "Photography", "Video Games", "Reading"],
-        optionsInt: ["Health", "Fitness","Languages", "Food", "Religion", "Fashion", "Technology", "Party", "Bars", "Travel"]
-    });
- });
-// Settings handler
-router.post('/settings', ensureAuthenticated, async (req, res) => {
-    console.log("Hola");
-    const { nameInput, mailInput, inputPassword, inputPassword2, descriptionINPUT, dateInput} = req.body;
-   
-    res.render('settings.hbs', { 
-        user: req.user,
-        options: ["Sports", "Gym","Art", "Surf", "Movies", "Photography", "Video Games", "Reading"],
-        optionsInt: ["Health", "Fitness","Languages", "Food", "Religion", "Fashion", "Technology", "Party", "Bars", "Travel"]
-    });
-    /*
-    User.updateOne({email: req.user.email}, {$set : {
-        name: "Steven Granados Vargas"
-        }
-        }, function(err, count) {
-            res.redirect('/settings');
-    });
-    */
-});
-    
-
-
-// PasswordChange
-router.get('/passwordChange', ensureAuthenticated,  (req, res) => {
-    res.render('passwordChange.hbs', { user: req.user });
-});
-
-// PasswordChange
-router.post('/passwordChange', ensureAuthenticated, (req, res) => {
-    
-    const { inputPassword, inputPassword2 } = req.body;
-    
-    if ( !inputPassword || !inputPassword2) {
-        console.log(inputPassword);
-        console.log(inputPassword2);
-        console.log(inputPassword);
-        console.log(req.user.email);
-        if ( inputPassword == inputPassword2){
-            User.updateOne({email: req.user.email}, {$set : {
-                name: "Marco Reveiz"
-                }
-                }, function(err, count) {
-                    res.redirect('/dashboard');
-            });
-        }else{
-            res.redirect('/passwordChange');
-        }
-    }
+router.get('/dashboard', ensureAuthenticated, (req, res) => { 
+    res.render('dashboard', { user: req.user });
     
 });
-
-
 
 
 //Agregado Steven
@@ -144,5 +91,18 @@ router.post('/update-message/:id', async (req, res) =>{
     res.redirect('/conversation?receptor=' + _receptor);
 });
 // Fin Steven
+/*
+// Posts
+router.get('/posts', ensureAuthenticated, (req, res) => {
+    id_user = req.user.id;
+    res.render('posts.ejs', { user: req.user })
+});
 
+
+router.post('/newUser', newUser);
+router.post('/newPost', newPost);
+router.post('/newImage', uploader.single('file'), newImage);
+router.post('/newVideo', uploader.single('file'), newVideo);
+router.post('/newDocument', uploader.single('file'), newDocument);
+*/
 module.exports = router;

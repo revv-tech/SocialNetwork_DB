@@ -1,0 +1,143 @@
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body">
+      <h1 class="text-center mb-3">
+        <i class="fas fa-user-plus"></i> Change Account Data
+      </h1>
+      
+      <form action="/User/settings" method="POST">
+        
+        <div class="form-group">
+          <h5 for="name">Name</h5>
+          <input
+            type="name"
+            id="name"
+            name="name"
+            class="form-control"
+            placeholder="Enter Name"
+            value="<%= user.name %>"
+          />
+          
+        </div>
+        <div class="form-group">
+          <h5 for="email">Email</h5>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="Enter Email"
+            value="<%= user.email %>"
+            readonly
+          />
+          <% if (user.emailPrivate) {%>
+            <label>Set your email public   <input type="checkbox"  name="emailPrivate" id="emailPrivate" checked></label>
+          <% } else { %>
+            <label>Set your email public   <input type="checkbox"  name="emailPrivate" id="emailPrivate" unchecked></label>
+          <% } %>
+        </div>
+        <div class="form-group">
+          <h5 for="password">Password</h5>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Create Password"
+            value="<%= typeof password != 'undefined' ? password : '' %>"
+          />
+        </div>
+        <div class="form-group">
+          <h5 for="password2">Confirm Password</h5>
+          <input
+            type="password"
+            id="password2"
+            name="password2"
+            class="form-control"
+            placeholder="Confirm Password"
+            value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
+          />
+        </div>
+        <div class="form-group">
+          <h5 for="description"> Description</h5>
+          <input
+            type="description"
+            id="description"
+            name="description"
+            class="form-control"
+            placeholder="Tell something about you"
+            value="<%= user.description %>"
+          />
+          <% if (user.descriptionPrivate) {%>
+            <label>Set your description public   <input type="checkbox"  name="descriptionPrivate" id="descriptionPrivate" checked></label>
+          <% } if (!user.descriptionPrivate)  { %>
+            <label>Set your description public   <input type="checkbox"  name="descriptionPrivate" id="descriptionPrivate" unchecked></label>
+          <% } %>
+            
+        </div>
+        <div class="form-group">
+          <h5 for="date">Date of birth</h5>
+          <input type="date" id="date" name="date"
+                value="<%= user.date %>"
+                min="1950-01-01" max="2025-12-31"
+          />
+          <% if (user.datePrivate) {%>
+            <label>Set your date of birth public   <input type="checkbox"  name="datePrivate" id="datePrivate" checked></label>
+          <% } else { %>
+            <label>Set your date of birth public   <input type="checkbox"  name="datePrivate" id="datePrivate" unchecked></label>
+          <% } %>
+        </div>
+        <div class="form-group">
+  <h5 for="Hoobies">Select three of your favorite hoobies (Ctrl + click)!</h5><br>  
+  <select name="hoobies" id="hoobies" multiple>
+    <% var options = ["Sports", "Gym","Art", "Surf", "Movies", "Photography", "Video Games", "Reading"]; %>
+    <% var userDefault = user.hoobies; %>
+    
+    <% for(var i = 0; i < options.length; i++) { %>
+      <% if (userDefault.includes( options[i])){ %>
+        <option value='<%= options[i] %>' selected> <%= options[i] %>  </option>
+      <% } else {%>
+        <option value='<%= options[i] %>'> <%= options[i] %>  </option>
+      <% }%>
+    
+    <% } %>
+    </select>
+    <% if (user.hoobiesPrivate) {%>
+      <label>Set your hoobies public   <input type="checkbox"  name="hoobiesPrivate" id="hoobiesPrivate" checked></label>
+    <% } else { %>
+      <label>Set your hoobies public   <input type="checkbox"  name="hoobiesPrivate" id="hoobiesPrivate" unchecked></label>
+    <% } %>
+  <p></p>
+  <h5 for="Interests">Select your favorite interests (Ctrl + click)!</h5><br>  
+ 
+    <select name="interests" id="interests" multiple>
+
+      <% var options = ["Health", "Fitness","Languages", "Food", "Religion", "Fashion", "Technology", "Party", "Bars", "Travel"]; %>
+      <% var userDefault = user.interests; %>
+      
+      <% for(var i = 0; i < options.length; i++) { %>
+        <% if (userDefault.includes( options[i])){ %>
+          <option value='<%= options[i] %>' selected> <%= options[i] %>  </option>
+        <% } else {%>
+          <option value='<%= options[i] %>'> <%= options[i] %>  </option>
+        <% }%>
+      <% } %>
+
+    </select>
+    <% if (user.interestsPrivate) {%>
+      <label>Set your interests public   <input type="checkbox"  name="interestsPrivate" id="interestsPrivate" checked></label>
+    <% } if (!user.interestsPrivate) { %>
+      <label>Set your interests public   <input type="checkbox"  name="interestsPrivate" id="interestsPrivate" unchecked></label>
+    <% } %>
+    
+   
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Update Data</button>
+      
+    </form>
+
+      <p></p>
+    <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
+    </div>
+  </div>
+</div>

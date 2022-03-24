@@ -3,6 +3,7 @@
 const express       = require('express');
 const router        = express.Router();
 const passport      = require('passport');
+const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 // Password handler
 const bcrypt        = require('bcryptjs');
 // User model
@@ -11,7 +12,6 @@ const User          = require('../model/UserMongoDB');
 router.get('/login', (req, res) => res.render('login'));
 // Register
 router.get('/register', (req, res) => res.render('register'));
-
 // Register Handle
 router.post('/register', (req, res) =>{
     
@@ -101,7 +101,81 @@ router.get('/logout', (req, res) => {
   res.redirect('/User/login');
 });
 
+// Settings
+router.get('/settings', ensureAuthenticated,  async (req, res) => {
+  res.render('settings', { user: req.user });
+});
 
+router.post('/settings', ensureAuthenticated, (req, res) => {
+  const { name, email, emailPrivate , password, password2, description, descriptionPrivate , date, datePrivate, hoobies, hoobiesPrivate, interests, interestsPrivate} = req.body;
+  var isEmailPublic = false;
+  var isDescriptionPublic = false;
+  var isDatePublic = false;
+  var ishoobiesPublic = false;
+  var isinterestsPublic = false;
+  
+  
+  if (emailPrivate == 'on'){
+    isEmailPublic = true;
+  }
+  if (descriptionPrivate == 'on'){
+    isDescriptionPublic = true;
+  }
+  if (datePrivate == 'on'){
+    isDatePublic = true;
+  }
+  if (hoobiesPrivate == 'on'){
+    ishoobiesPublic = true;
+  }
+  if (interestsPrivate == 'on'){
+    isinterestsPublic = true;
+  }
+  
+  if ( !password && !password2) {
+    User.updateOne({email: email}, {
+      $set : {
+        name: name,
+        emailPrivate: isEmailPublic,
+        description: description,
+        descriptionPrivate: isDescriptionPublic,
+        date: date,
+        datePrivate: isDatePublic,
+        hoobies: hoobies,
+        hoobiesPrivate: ishoobiesPublic,
+        interests: interests,
+        interestsPrivate: isinterestsPublic
+      }
+      }).then(
+      res.redirect('/User/settings')
+    );
+  } if ( password || password2) {
+      if ( password == password2) {
+
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(password, salt, (err, hash) => {
+            if (err) throw err;
+            var encryptedPass = hash;
+            User.updateOne({email: email}, {
+              $set : {
+                password: encryptedPass
+              }
+              }).then(
+              res.redirect('/User/settings')
+            );
+          });
+        });
+
+        
+    }else{
+      res.redirect('/User/settings');
+    }
+  }
+  
+  
+  
+  
+
+});
 
 
 

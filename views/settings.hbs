@@ -1,0 +1,167 @@
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <h1 class="text-center mb-3">
+        <i class="fas fa-user-plus"></i> Account Data
+    </h1>
+    </head>
+    <body>
+    <h1>Change your data: </h1>
+    <img src="..." class="rounded mx-auto d-block" alt="...">
+    <p></p>
+    <p></p>
+    <p></p>
+    <div>
+    <!-- NAME FORM -->
+    <form  action="/settings" method="POST">
+        <div>
+        <h5 for="floatingInputValue">Your name</h5>
+        <input type="text" class="form-control" id="nameInput" name="nameInput" placeholder="New Name" value= "{{user.name}}">
+        
+        <p></p>
+        <p></p>
+        <p></p>
+      </div>
+    
+    <!-- EMAIL FORM -->
+      <h5 for="floatingInputValue">Your email</h5>
+      <input type="email" class="form-control" id="mailInput" placeholder="name@example.com"  value= "{{user.email}}" disabled readonly>
+      
+      <p></p>
+      <p></p>
+      <p></p>
+   
+
+    <!-- Description FORM -->
+    
+    <h5 for="floatingInputValue">Description</h5>
+    <input type="text" class="form-control" id="descriptionINPUT"  name="descriptionINPUT" placeholder="New Description" value= "{{user.description}}">
+    
+      <p></p>
+      <p></p>
+      <p></p>
+  
+  
+      {{#if (user.descriptionPrivate) }}
+        <input type="checkbox" class="form-check-input" id="isPublicDescrip" checked>
+      {{  else  }}
+        <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
+      <label class="form-check-label" for="isPublicEmail">Set your email public</label>
+      {{/if}}
+  
+  <p></p>
+  <p></p>
+  <p></p>
+    <!-- PASSWORD FORM -->
+    <form action="/passwordChange" method="POST">
+      <button type="submit" class="btn btn-primary btn-block mb-2" >Update password</button>
+    </form>
+    
+    <!-- DATE FORM -->
+    <h5 class="form-check-label" for="isPublicDescrip" >Change your birth date: </h5>
+    <p></p>
+    <p></p>
+    <p></p>
+    <input type="date" id="dateInput" name="dateInput" value={{user.date}} >
+    <p></p>
+    <p></p>
+    <p></p>
+    <div class="mb-3 form-check">
+      {{#if (user.datePrivate) }}
+        <input type="checkbox" class="form-check-input" id="isPublicDate" checked>
+      {{  else  }}
+        <input type="checkbox" class="form-check-input" id="isPublicDate" >
+      {{/if}}
+      <label class="form-check-label" for="isPublicDescrip">Set your birth date public</label>
+    </div>
+    
+        <p></p>
+        <p></p>
+        <p></p>
+    <h5 for="Hoobies">Select your favorite hoobies (Ctrl + click)!</h5>
+    
+    <div>
+      
+        <select class="form-select" multiple aria-label="newHoobies" id="hoobiesSelect"></select>
+        <ul>
+          {{#each options}}
+          
+            <option value={{this}} selected= {{this}} </option></option>
+          {{/each}}
+          
+        </ul>
+        </select>
+      
+      
+    </div>
+    
+    <div class="mb-3 form-check">
+        
+        {{#if (user.hoobiesPrivate)}}
+          <input type="checkbox" class="form-check-input" id="isPublicHoobie" checked>
+         {{  else  }}
+          <input type="checkbox" class="form-check-input" id="isPublicHoobie" >
+        {{/if}}
+        <label class="form-check-label" for="isPublicHoobie">Set your hoobies public</label>
+    </div>
+    <!-- New Interests -->
+        <p></p>
+        <p></p>
+        <p></p>
+  
+    <h5 for="Interests">Select your favorite interests (Ctrl + click)!</h5>
+    <div>
+      <select class="form-select" multiple aria-label="newInterests" id="interestsSelect"></select>
+        <ul>
+          {{#each optionsInt}}
+        
+          <option value={{this}} selected= {{this}}  </option></option>
+          
+          
+          {{/each}}
+        </ul>
+        </select>
+    </div>
+  
+    <div class="mb-3 form-check">
+        
+        {{#if (user.hoobiesPrivate)}}
+          <input type="checkbox" class="form-check-input" id="isPublicInt" checked>
+         {{  else  }}
+          <input type="checkbox" class="form-check-input" id="isPublicInt" >
+        {{/if}}
+        <label class="form-check-label" for="isPublicInt">Set your interests public</label>
+    </div>
+
+    <!-- Image uploader -->
+    <div>
+        <p></p>
+        <p></p>
+        <p></p>
+        <h5 for="formFileLg" class="form-label">Change your profile pic: </h5>
+        <input class="form-control form-control-lg" id="formFileLg" type="file">
+    </div>
+    <div class="mb-3 form-check">
+        
+
+        {{#if (user.imagePrivate)}}
+          <input type="checkbox" class="form-check-input" id="isPublicImage" checked>
+         {{  else  }}
+          <input type="checkbox" class="form-check-input" id="isPublicImage" >
+        {{/if}}
+        <label class="form-check-label" for="isPublicImage">Set your interests public</label>
+    </div>
+   
+    </form>
+    <p></p>
+    <p></p>
+    <p></p>
+    <a href="/settings" class="btn btn-primary btn-block mb-2">Update data</a>
+    <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
+  </div>
+  </body>
+

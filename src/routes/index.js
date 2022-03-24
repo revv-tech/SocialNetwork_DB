@@ -12,44 +12,65 @@ var _numMensajes = 0
 
 // Welcome Page
 router.get('/', (req, res) => res.render('welcome'));
-
 // Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) => { 
-    res.render('dashboard', { user: req.user });
-    
-});
+router.get('/dashboard', ensureAuthenticated, (req, res) => {  res.render('dashboard', { user: req.user });   });
 // Settings
-router.get('/settings', ensureAuthenticated,  (req, res) => {
-    
-    
+router.get('/settings', ensureAuthenticated,  (req, res) => { 
+    res.render('settings.hbs', { 
+        user: req.user,
+        options: ["Sports", "Gym","Art", "Surf", "Movies", "Photography", "Video Games", "Reading"],
+        optionsInt: ["Health", "Fitness","Languages", "Food", "Religion", "Fashion", "Technology", "Party", "Bars", "Travel"]
+    });
+ });
+// Settings handler
+router.post('/settings', ensureAuthenticated, async (req, res) => {
+    console.log("Hola");
     const { nameInput, mailInput, inputPassword, inputPassword2, descriptionINPUT, dateInput} = req.body;
-    console.log(req.body);
-    if (nameInput){
-        console.log(req.body);
-        
-    }
-    if (mailInput){
-        console.log(mailInput);
-        
-    }
-    if (inputPassword){
-        if (inputPassword == inputPassword2){
-            console.log(inputPassword);
-            
-        } 
-    }
-    if (descriptionINPUT){
-        console.log(descriptionINPUT);
-    }
-        
+   
+    res.render('settings.hbs', { 
+        user: req.user,
+        options: ["Sports", "Gym","Art", "Surf", "Movies", "Photography", "Video Games", "Reading"],
+        optionsInt: ["Health", "Fitness","Languages", "Food", "Religion", "Fashion", "Technology", "Party", "Bars", "Travel"]
+    });
+    /*
     User.updateOne({email: req.user.email}, {$set : {
-            name: " Steven Granados Vargas"
+        name: "Steven Granados Vargas"
         }
-    }).then(
-        res.render('settings.ejs', { user: req.user })
-    );
+        }, function(err, count) {
+            res.redirect('/settings');
+    });
+    */
+});
     
 
+
+// PasswordChange
+router.get('/passwordChange', ensureAuthenticated,  (req, res) => {
+    res.render('passwordChange.hbs', { user: req.user });
+});
+
+// PasswordChange
+router.post('/passwordChange', ensureAuthenticated, (req, res) => {
+    
+    const { inputPassword, inputPassword2 } = req.body;
+    
+    if ( !inputPassword || !inputPassword2) {
+        console.log(inputPassword);
+        console.log(inputPassword2);
+        console.log(inputPassword);
+        console.log(req.user.email);
+        if ( inputPassword == inputPassword2){
+            User.updateOne({email: req.user.email}, {$set : {
+                name: "Marco Reveiz"
+                }
+                }, function(err, count) {
+                    res.redirect('/dashboard');
+            });
+        }else{
+            res.redirect('/passwordChange');
+        }
+    }
+    
 });
 
 
@@ -58,10 +79,9 @@ router.get('/settings', ensureAuthenticated,  (req, res) => {
 //Agregado Steven
 router.get('/chats', ensureAuthenticated, (req, res) => {
     _remitente = req.user.name;
-    console.log(req.user.name);
+    //console.log(req.user.name);
     res.render('chats.ejs', { user: req.user })
 });
-
 
 
 router.get('/conversation', async (req, res) => {
@@ -71,7 +91,7 @@ router.get('/conversation', async (req, res) => {
 
     if(_receptor == _remitente)
     res.redirect('/chats')
-
+    
     User.findOne({name: _receptor}).then(name => {
         console.log(name)
         if (name){

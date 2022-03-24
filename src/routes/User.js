@@ -108,53 +108,70 @@ router.get('/settings', ensureAuthenticated,  async (req, res) => {
 
 router.post('/settings', ensureAuthenticated, (req, res) => {
   const { name, email, emailPrivate , password, password2, description, descriptionPrivate , date, datePrivate, hoobies, hoobiesPrivate, interests, interestsPrivate} = req.body;
-  var isEmailPublic = true;
-  var isDescriptionPublic = true;
-  var isDatePublic = true;
-  var ishoobiesPublic = true;
-  var isinterestsPublic = true;
-  console.log(req.body);
-
+  var isEmailPublic = false;
+  var isDescriptionPublic = false;
+  var isDatePublic = false;
+  var ishoobiesPublic = false;
+  var isinterestsPublic = false;
+  
+  
   if (emailPrivate == 'on'){
-    isEmailPublic = false;
+    isEmailPublic = true;
   }
   if (descriptionPrivate == 'on'){
-    isDescriptionPublic = false;
+    isDescriptionPublic = true;
   }
   if (datePrivate == 'on'){
-    isDatePublic = false;
+    isDatePublic = true;
   }
   if (hoobiesPrivate == 'on'){
-    ishoobiesPublic = false;
+    ishoobiesPublic = true;
   }
   if (interestsPrivate == 'on'){
-    isinterestsPublic = false;
+    isinterestsPublic = true;
   }
+  
   if ( !password && !password2) {
     User.updateOne({email: email}, {
       $set : {
         name: name,
+        emailPrivate: isEmailPublic,
         description: description,
+        descriptionPrivate: isDescriptionPublic,
         date: date,
+        datePrivate: isDatePublic,
         hoobies: hoobies,
-        interests: interests
+        hoobiesPrivate: ishoobiesPublic,
+        interests: interests,
+        interestsPrivate: isinterestsPublic
       }
       }).then(
       res.redirect('/User/settings')
     );
-  }
+  } if ( password || password2) {
+      if ( password == password2) {
 
-  if ( password && password2) {
-    if ( password == password2) {
-      User.updateOne({email: email}, {
-        $set : {
-          password: password
-        }
-        }).then(
-        res.redirect('/User/settings')
-      );
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(password, salt, (err, hash) => {
+            if (err) throw err;
+            var encryptedPass = hash;
+            User.updateOne({email: email}, {
+              $set : {
+                password: encryptedPass
+              }
+              }).then(
+              res.redirect('/User/settings')
+            );
+          });
+        });
+
+        
+    }else{
+      res.redirect('/User/settings');
     }
   }
+  
+  
   
   
 

@@ -1,3 +1,4 @@
+/*
 const{connection, Factory} = require('../Factory/query_factory');
 
 // Getters
@@ -85,3 +86,4 @@ async function newPost(req, res){
     res.json(result);
 }
 module.exports = {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newImage, newVideo, newDocument, newUser, newPost};
+*/

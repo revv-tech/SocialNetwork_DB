@@ -1,3 +1,4 @@
+/*
 const util = require('util')
 const connection = require('../config/mysqlDB');
 const query = util.promisify(connection.query).bind(connection);
@@ -13,3 +14,4 @@ async function Factory(sql){
     }
 } 
 module.exports = {connection, Factory};
+*/

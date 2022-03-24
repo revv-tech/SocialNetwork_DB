@@ -91,7 +91,7 @@ app.listen(port, function()  {
 // PATH STEVEN
 // GOOGLE_APPLICATION_CREDENTIALS= C:\Users\USER\OneDrive\Escritorio\Message-Firebase\firebase.json
 // PATH Marco
-// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\Message-Firebase\firebase.json
+// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\firebase.json
 // PATH jarod
 // GOOGLE_APPLICATION_CREDENTIALS= /home/jarod/Documents/TEC/BD II/Proyectos/SocialNetwork_DB/firebase.json
 // PATH Fabian

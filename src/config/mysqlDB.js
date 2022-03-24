@@ -1,3 +1,4 @@
+/*
 // MySQL Config
 const mysql = require('mysql');
 const connection = mysql.createConnection({
@@ -14,3 +15,4 @@ connection.connect(function(error){
     }
 });
 module.exports = connection;
+*/

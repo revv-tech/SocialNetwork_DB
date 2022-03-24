@@ -70,7 +70,7 @@
           />
           <% if (user.descriptionPrivate) {%>
             <label>Set your description public   <input type="checkbox"  name="descriptionPrivate" id="descriptionPrivate" checked></label>
-          <% } else { %>
+          <% } if (!user.descriptionPrivate)  { %>
             <label>Set your description public   <input type="checkbox"  name="descriptionPrivate" id="descriptionPrivate" unchecked></label>
           <% } %>
             
@@ -124,18 +124,18 @@
       <% } %>
 
     </select>
-    <% if (user.interestsPrivate) %>
-      <label>Set your hoobies public   <input type="checkbox"  name="interestsPrivate" id="interestsPrivate" value="1" checked></label>
-    <%  if (user.interestsPrivate) %>
-      <label>Set your hoobies public   <input type="checkbox"  name="interestsPrivate" id="interestsPrivate" value="2" unchecked></label>
-    <% %>
-    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+    <% if (user.interestsPrivate) {%>
+      <label>Set your interests public   <input type="checkbox"  name="interestsPrivate" id="interestsPrivate" checked></label>
+    <% } if (!user.interestsPrivate) { %>
+      <label>Set your interests public   <input type="checkbox"  name="interestsPrivate" id="interestsPrivate" unchecked></label>
+    <% } %>
+    
+   
       </div>
       <button type="submit" class="btn btn-primary btn-block">Update Data</button>
       
     </form>
-    <p></p>
-      <p></p>
+
       <p></p>
     <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
     </div>

@@ -23,41 +23,6 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
     res.render('dashboard', { user: req.user });
     
 });
-// Settings
-router.get('/settings', ensureAuthenticated,  (req, res) => {
-    
-    
-    const { nameInput, mailInput, inputPassword, inputPassword2, descriptionINPUT, dateInput} = req.body;
-    console.log(req.body);
-    if (nameInput){
-        console.log(req.body);
-        
-    }
-    if (mailInput){
-        console.log(mailInput);
-        
-    }
-    if (inputPassword){
-        if (inputPassword == inputPassword2){
-            console.log(inputPassword);
-            
-        } 
-    }
-    if (descriptionINPUT){
-        console.log(descriptionINPUT);
-    }
-        
-    User.updateOne({email: req.user.email}, {$set : {
-            name: " Steven Granados Vargas"
-        }
-    }).then(
-        res.render('settings.ejs', { user: req.user })
-    );
-    
-
-});
-
-
 
 
 //Agregado Steven

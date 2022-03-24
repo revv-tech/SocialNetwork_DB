@@ -3,6 +3,7 @@
 const express       = require('express');
 const router        = express.Router();
 const passport      = require('passport');
+const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 // Password handler
 const bcrypt        = require('bcryptjs');
 // User model
@@ -11,7 +12,6 @@ const User          = require('../model/UserMongoDB');
 router.get('/login', (req, res) => res.render('login'));
 // Register
 router.get('/register', (req, res) => res.render('register'));
-
 // Register Handle
 router.post('/register', (req, res) =>{
     
@@ -101,7 +101,64 @@ router.get('/logout', (req, res) => {
   res.redirect('/User/login');
 });
 
+// Settings
+router.get('/settings', ensureAuthenticated,  async (req, res) => {
+  res.render('settings', { user: req.user });
+});
 
+router.post('/settings', ensureAuthenticated, (req, res) => {
+  const { name, email, emailPrivate , password, password2, description, descriptionPrivate , date, datePrivate, hoobies, hoobiesPrivate, interests, interestsPrivate} = req.body;
+  var isEmailPublic = true;
+  var isDescriptionPublic = true;
+  var isDatePublic = true;
+  var ishoobiesPublic = true;
+  var isinterestsPublic = true;
+  console.log(req.body);
+
+  if (emailPrivate == 'on'){
+    isEmailPublic = false;
+  }
+  if (descriptionPrivate == 'on'){
+    isDescriptionPublic = false;
+  }
+  if (datePrivate == 'on'){
+    isDatePublic = false;
+  }
+  if (hoobiesPrivate == 'on'){
+    ishoobiesPublic = false;
+  }
+  if (interestsPrivate == 'on'){
+    isinterestsPublic = false;
+  }
+  if ( !password && !password2) {
+    User.updateOne({email: email}, {
+      $set : {
+        name: name,
+        description: description,
+        date: date,
+        hoobies: hoobies,
+        interests: interests
+      }
+      }).then(
+      res.redirect('/User/settings')
+    );
+  }
+
+  if ( password && password2) {
+    if ( password == password2) {
+      User.updateOne({email: email}, {
+        $set : {
+          password: password
+        }
+        }).then(
+        res.redirect('/User/settings')
+      );
+    }
+  }
+  
+  
+
+});
 
 
 

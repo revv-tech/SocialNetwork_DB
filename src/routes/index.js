@@ -16,6 +16,7 @@ router.get('/', (req, res) => res.render('welcome'));
 router.get('/dashboard', ensureAuthenticated, (req, res) => {  res.render('dashboard', { user: req.user });   });
 // Settings
 router.get('/settings', ensureAuthenticated,  (req, res) => { 
+    console.log(req.user);
     res.render('settings.hbs', { 
         user: req.user,
         options: ["Sports", "Gym","Art", "Surf", "Movies", "Photography", "Video Games", "Reading"],

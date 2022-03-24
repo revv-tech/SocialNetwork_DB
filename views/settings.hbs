@@ -16,12 +16,12 @@
     <p></p>
     <p></p>
     <div>
-    <!-- NAME FORM -->
+    
     <form  action="/settings" method="POST">
+    <!-- NAME FORM -->
         <div>
         <h5 for="floatingInputValue">Your name</h5>
-        <input type="text" class="form-control" id="nameInput" name="nameInput" placeholder="New Name" value= "{{user.name}}">
-        
+        <input type="text" class="form-control" id="nameInput" name="nameInput" placeholder="New Name" value= "{{req.user.name}}">
         <p></p>
         <p></p>
         <p></p>
@@ -29,7 +29,7 @@
     
     <!-- EMAIL FORM -->
       <h5 for="floatingInputValue">Your email</h5>
-      <input type="email" class="form-control" id="mailInput" placeholder="name@example.com"  value= "{{user.email}}" disabled readonly>
+      <input type="email" class="form-control" id="mailInput" placeholder="name@example.com"  value= "{{req.user.email}}" disabled readonly>
       
       <p></p>
       <p></p>
@@ -39,14 +39,14 @@
     <!-- Description FORM -->
     
     <h5 for="floatingInputValue">Description</h5>
-    <input type="text" class="form-control" id="descriptionINPUT"  name="descriptionINPUT" placeholder="New Description" value= "{{user.description}}">
+    <input type="text" class="form-control" id="descriptionINPUT"  name="descriptionINPUT" placeholder="New Description" value= "{{req.user.description}}">
     
       <p></p>
       <p></p>
       <p></p>
   
   
-      {{#if (user.descriptionPrivate) }}
+      {{#if (req.user.descriptionPrivate) }}
         <input type="checkbox" class="form-check-input" id="isPublicDescrip" checked>
       {{  else  }}
         <input type="checkbox" class="form-check-input" id="isPublicDescrip" >
@@ -66,12 +66,12 @@
     <p></p>
     <p></p>
     <p></p>
-    <input type="date" id="dateInput" name="dateInput" value={{user.date}} >
+    <input type="date" id="dateInput" name="dateInput" value="{{req.user.date}}" >
     <p></p>
     <p></p>
     <p></p>
     <div class="mb-3 form-check">
-      {{#if (user.datePrivate) }}
+      {{#if (req.user.datePrivate) }}
         <input type="checkbox" class="form-check-input" id="isPublicDate" checked>
       {{  else  }}
         <input type="checkbox" class="form-check-input" id="isPublicDate" >
@@ -101,7 +101,7 @@
     
     <div class="mb-3 form-check">
         
-        {{#if (user.hoobiesPrivate)}}
+        {{#if (req.user.hoobiesPrivate)}}
           <input type="checkbox" class="form-check-input" id="isPublicHoobie" checked>
          {{  else  }}
           <input type="checkbox" class="form-check-input" id="isPublicHoobie" >
@@ -129,7 +129,7 @@
   
     <div class="mb-3 form-check">
         
-        {{#if (user.hoobiesPrivate)}}
+        {{#if (req.user.hoobiesPrivate)}}
           <input type="checkbox" class="form-check-input" id="isPublicInt" checked>
          {{  else  }}
           <input type="checkbox" class="form-check-input" id="isPublicInt" >
@@ -148,7 +148,7 @@
     <div class="mb-3 form-check">
         
 
-        {{#if (user.imagePrivate)}}
+        {{#if (req.user.imagePrivate)}}
           <input type="checkbox" class="form-check-input" id="isPublicImage" checked>
          {{  else  }}
           <input type="checkbox" class="form-check-input" id="isPublicImage" >

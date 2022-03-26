@@ -14,8 +14,10 @@ router.post('/findFriends', (req, res) => findFriends(req, res));
 async function add (req, res) {
     console.log(req.body)
     const { name, guid} = req.body;
-    const response = await db.addUser(name, guid)
-    res.send(response)  
+    const response = await db.addUser(name, guid);
+    let sql = `insert into user values (${guid});`;
+    const result = await Factory(sql);
+    res.send(response) ;
 }
 
 async function remove (req, res) {

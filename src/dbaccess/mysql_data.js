@@ -1,4 +1,3 @@
-/*
 const{connection, Factory} = require('../Factory/query_factory');
 
 // Getters
@@ -41,49 +40,59 @@ async function getNotPublicPosts(req, res){
 }
 
 // Creates
-async function newImage(req, res){
+async function newImage(req, res, id_post){
     const {body, file} = req;
     if(file) {
         let url = `http://localhost:5000/images/${file.filename}`
-        let sql = `insert into image (image, id_post) values ('${connection.escape(url)}', ${connection.escape(body.id_post)});`;
+        let sql = `insert into image (image, id_post) values ('${connection.escape(url)}', ${id_post});`;
         const result = await Factory(sql);
         res.json(result);
     }
 }
 
-async function newVideo(req, res){
+async function newVideo(req, res, id_post){
     const {body, file} = req;
     if(file) {
         let url = `http://localhost:5000/videos/${file.filename}`
-        let sql = `insert into video (video, id_post) values ('${connection.escape(url)}', ${connection.escape(body.id_post)});`;
+        let sql = `insert into video (video, id_post) values ('${connection.escape(url)}', ${id_post});`;
         const result = await Factory(sql);
         res.json(result);
     }
 }
 
-async function newDocument(req, res){
+async function newDocument(req, res, id_post){
     const {body, file} = req;
     if(file) {
         let url = `http://localhost:5000/documents/${file.filename}`
-        let sql = `insert into document (document, id_post) values ('${connection.escape(url)}', ${connection.escape(body.id_post)});`;
+        let sql = `insert into document (document, id_post) values ('${connection.escape(url)}', ${id_post});`;
         const result = await Factory(sql);
         res.json(result);
     }
 }
 
-async function newUser(req, res){
-    const{id_user} = req.params;
-    console.log(req.params);
-    let sql = `insert into user values (${connection.escape(id_user)});`;
+async function newUser(email){
+    console.log(email);
+    let sql = `insert into user values (${email});`;
+    const result = await Factory(sql);
+}
+
+async function newPost(req, res){
+    const{text, is_public, email_user} = req.params;
+    console.log(text);
+    let sql = `insert into post (text, is_public, email_user) values (${text}, ${is_public}, ${email_user});`;
     const result = await Factory(sql);
     res.json(result);
 }
 
-async function newPost(req, res){
-    const{text, is_public, id_user} = req.params;
-    let sql = `insert into post (text, is_public, id_user) values (${text}, ${is_public}, ${id_user});`;
-    const result = await Factory(sql);
-    res.json(result);
+async function createPost(req, res){
+    const {image, video, document} = req.params;
+    const post = newPost(req, res);
+    if(image){
+        newImage(req, res, post.id)
+    } else if (video){
+        newVideo(req, res, post.id)
+    } else if (document){
+        newDocument(req, res, post.id)
+    }
 }
-module.exports = {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newImage, newVideo, newDocument, newUser, newPost};
-*/
+module.exports = {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newUser, createPost};

@@ -7,10 +7,55 @@
 <a href="/chats" class="btn btn-primary btn-block mb-2"
           >Messages</a>
 
-<a href="/posts" class="btn btn-primary btn-block mb-2"
+<a href="/posts/create" class="btn btn-primary btn-block mb-2"
           >New Post</a>
           
 <a href="/User/settings" class="btn btn-primary btn-block mb-2"
           >Settings</a>
 
 <a href="/User/logout" class="btn btn-secondary btn-block mb-2">Logout</a>
+
+<div class="container p-5">
+    <div class="row">
+        {{#each links}}
+        <div class="col-md-10">
+            <div class="card text-center">
+                <div class="card-body">
+                    <a href="{{url}}" target="_blank">
+                        <h2 class="card-title text-uppercase">
+                            {{userEmail}}
+                        </h2>
+                    </a>
+                    <p class="m-2">{{description}}</p>
+                    <h3>Photos</h3>
+                    <div class="slides">
+                        <img src="https://www.nationalgeographic.com.es/medio/2018/02/27/playa-de-isuntza-lekeitio__1280x720.jpg" width="350" height="350">
+                        <img src="https://mott.pe/noticias/wp-content/uploads/2019/03/los-50-paisajes-maravillosos-del-mundo-para-tomar-fotos.jpg" width="350" height="350">
+                        <img src="https://static.dw.com/image/58845200_303.jpg" width="350" height="350">
+                    </div>
+                    <h3>Videos</h3>
+                    <div class="slides">
+                        <img src="https://www.nationalgeographic.com.es/medio/2018/02/27/playa-de-isuntza-lekeitio__1280x720.jpg" width="350" height="350">
+                        <img src="https://mott.pe/noticias/wp-content/uploads/2019/03/los-50-paisajes-maravillosos-del-mundo-para-tomar-fotos.jpg" width="350" height="350">
+                        <img src="https://static.dw.com/image/58845200_303.jpg" width="350" height="350">
+                    </div>
+                    <h3>Documents</h3>
+                    <div class="slides">
+                        <img src="https://www.nationalgeographic.com.es/medio/2018/02/27/playa-de-isuntza-lekeitio__1280x720.jpg" width="350" height="350">
+                        <img src="https://mott.pe/noticias/wp-content/uploads/2019/03/los-50-paisajes-maravillosos-del-mundo-para-tomar-fotos.jpg" width="350" height="350">
+                        <img src="https://static.dw.com/image/58845200_303.jpg" width="350" height="350">
+                    </div>
+                    <p></p>
+                    <a class="btn btn-danger" href="/posts/delete/{{id}}">
+                        Delete Post
+                    </a>
+                    <a class="btn btn-secondary" href="/posts/edit/{{id}}">
+                        Edit Post
+                    </a>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        {{/each}}
+    </div>
+</div>

@@ -2,10 +2,6 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
-const {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newImage, newVideo, newDocument, newUser, newPost} = require('../dbaccess/mysql_data');
-const storage = require('../config/multer');
-const multer = require('multer');
-const uploader = multer({storage});
 
 //Agregado Steven
 const User          = require('../model/UserMongoDB');
@@ -93,18 +89,5 @@ router.post('/update-message/:id', async (req, res) =>{
     res.redirect('/conversation?receptor=' + _receptor);
 });
 // Fin Steven
-/*
-// Posts
-router.get('/posts', ensureAuthenticated, (req, res) => {
-    id_user = req.user.id;
-    res.render('posts.ejs', { user: req.user })
-});
 
-
-router.post('/newUser', newUser);
-router.post('/newPost', newPost);
-router.post('/newImage', uploader.single('file'), newImage);
-router.post('/newVideo', uploader.single('file'), newVideo);
-router.post('/newDocument', uploader.single('file'), newDocument);
-*/
 module.exports = router;

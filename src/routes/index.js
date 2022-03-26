@@ -1,12 +1,16 @@
 // RUTAS GENERALES
-
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newImage, newVideo, newDocument, newUser, newPost} = require('../dbaccess/mysql_data');
+const storage = require('../config/multer');
+const multer = require('multer');
+const uploader = multer({storage});
+
 //Agregado Steven
 const User          = require('../model/UserMongoDB');
 const { db } = require('../firebase');
-const _remitente = "Marco Reveiz"
+var _remitente = ""
 var _receptor = ""
 var _numMensajes = 0
 // Fin Steven
@@ -15,12 +19,19 @@ var _numMensajes = 0
 router.get('/', (req, res) => res.render('welcome'));
 
 // Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) => res.render('dashboard', { user: req.user }) );
-// Settings
-router.get('/settings', ensureAuthenticated, (req, res) => res.render('settings.ejs', { user: req.user }) );
+router.get('/dashboard', ensureAuthenticated, (req, res) => { 
+    res.render('dashboard', { user: req.user });
+    
+});
+
 
 //Agregado Steven
-router.get('/chats', ensureAuthenticated,(req, res) =>  res.render('chats.hbs', { user: req.user }) );
+router.get('/chats', ensureAuthenticated, (req, res) => {
+    _remitente = req.user.name;
+    console.log(req.user.name);
+    res.render('chats.ejs', { user: req.user })
+});
+
 
 
 router.get('/conversation', async (req, res) => {
@@ -82,6 +93,18 @@ router.post('/update-message/:id', async (req, res) =>{
     res.redirect('/conversation?receptor=' + _receptor);
 });
 // Fin Steven
+/*
+// Posts
+router.get('/posts', ensureAuthenticated, (req, res) => {
+    id_user = req.user.id;
+    res.render('posts.ejs', { user: req.user })
+});
 
+
+router.post('/newUser', newUser);
+router.post('/newPost', newPost);
+router.post('/newImage', uploader.single('file'), newImage);
+router.post('/newVideo', uploader.single('file'), newVideo);
+router.post('/newDocument', uploader.single('file'), newDocument);
+*/
 module.exports = router;
-

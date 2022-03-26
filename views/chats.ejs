@@ -1,0 +1,22 @@
+<h1 class="text-center mb-3">
+    <i></i> Chats
+</h1>
+
+<h5 class="lead mb-3">Welcome <%= user.name %></h5>
+<form action="/conversation" method="GET">
+
+<div>
+    <h5 for="receptor">Enter the user you want to search: </h5>
+    <input type="text" class="form-control" name="receptor" placeholder="Escribe el nombre de usuario" id="receptor">
+    <p></p>
+    <p></p>
+    <p></p>
+</div>
+
+<div>
+    <button class="btn btn-primary btn-block mb-2">Search user</button>
+    <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
+</div>
+    
+
+</form>

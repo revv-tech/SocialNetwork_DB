@@ -1,3 +1,6 @@
+//MySQL Config
+const mysqlDB= require('./src/config/mysqlDB');
+
 // Mongo Config
 const mongoDB       = require('./src/config/mongoDB');
 const express       = require('express');
@@ -78,10 +81,18 @@ app.use('/',require('./src/routes/index'));
 // Users
 app.use('/User',require('./src/routes/User'));
 
+//ne4j
+app.use('/user',require('./src/routes/neo4j_user'));
+app.use('/friends',require('./src/routes/friendship'));
+
 app.listen(port, function()  {
     console.log(`Server running on port: ${port}`);
 });
 // PATH STEVEN
 // GOOGLE_APPLICATION_CREDENTIALS= C:\Users\USER\OneDrive\Escritorio\Message-Firebase\firebase.json
 // PATH Marco
-// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\Message-Firebase\firebase.json
+// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\firebase.json
+// PATH jarod
+// GOOGLE_APPLICATION_CREDENTIALS= /home/jarod/Documents/TEC/BD II/Proyectos/SocialNetwork_DB/firebase.json
+// PATH Fabian
+// GOOGLE_APPLICATION_CREDENTIALS= D:\Datos\Documents\Estudios\TEC\Semestre VII\Bases de Datos II\Proyecto 1\SocialNetwork_DB\firebase.json

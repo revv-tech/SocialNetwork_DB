@@ -13,6 +13,7 @@ const { db } = require('../firebase');
 var _remitente = ""
 var _receptor = ""
 var _numMensajes = 0
+var _post = 0
 // Fin Steven
 
 // Welcome Page
@@ -27,7 +28,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 
 //Agregado Steven
 router.get('/chats', ensureAuthenticated, (req, res) => {
-    _remitente = req.user.name;
+    _remitente = req.user.email;
     console.log(req.user.name);
     res.render('chats.ejs', { user: req.user })
 });
@@ -35,21 +36,21 @@ router.get('/chats', ensureAuthenticated, (req, res) => {
 
 
 router.get('/conversation', async (req, res) => {
-    const querySnapshot = await db.collection('Mensajes').get();
+    const querySnapshot = await db.collection('Mensajes').orderBy("numero", "asc").get();
     _numMensajes = querySnapshot.size + 1;
     _receptor = req.query.receptor
 
     if(_receptor == _remitente)
     res.redirect('/chats')
 
-    User.findOne({name: _receptor}).then(name => {
-        console.log(name)
-        if (name){
+    User.findOne({email: _receptor}).then(user => {
+        if (user){
             const mensajes = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
                 _receptor,
                 _remitente,
+
             }));
             res.render('index.hbs', {mensajes});
         }
@@ -75,6 +76,26 @@ router.post('/new-message', async (req, res) =>{
     });
     res.redirect('/conversation?receptor=' + _receptor);
 });
+
+router.post('/new-comment', async (req, res) =>{
+
+    const _timeStamp = Date.now()
+    const { mensaje, remitente = _remitente, post = _post, fecha = _timeStamp} = req.body
+
+    await db.collection('Comentarios').add({
+        remitente: remitente,
+        mensaje: mensaje,
+        post: post,
+        fecha: fecha,
+    });
+    /*res.redirect('/conversation?receptor=' + _receptor);*/
+});
+
+router.get('/delete-comment/:id', async (req, res) =>{
+    await db.collection("Comentarios").doc(req.params.id).delete();
+    //res.redirect('/conversation?receptor=' + _receptor);
+});
+
 
 router.get('/edit-message/:id', async (req, res) =>{
     const doc = await db.collection("Mensajes").doc(req.params.id).get();

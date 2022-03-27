@@ -1,4 +1,8 @@
 const{connection, Factory} = require('../Factory/query_factory');
+const storage = require('../config/multer');
+const multer = require('multer');
+const path = require('path')
+const upload = multer({storage});
 
 // Getters
 async function getAllData(req, res){
@@ -40,59 +44,91 @@ async function getNotPublicPosts(req, res){
 }
 
 // Creates
-async function newImage(req, res, id_post){
+async function newImage(req, res){
+    const {body, files} = req;
+    if(files){
+        for (const file of files) {
+            let url = `http://localhost:5000/images/${file.filename}`
+            let sql = `insert into image (image, id_post) values ('${url}', 28);`; // Falta obtener id_post
+            const result = await Factory(sql);
+        }
+        //const { id_post } = result;
+        res.redirect('/posts/create/addVideos');
+    } else {
+        console.log('NO IMAGES')
+    }
+}
+
+// Ejemplo de como insertar una imagen en la BD
+async function addOneImage(req, res){
     const {body, file} = req;
-    if(file) {
+    if(file){
         let url = `http://localhost:5000/images/${file.filename}`
-        let sql = `insert into image (image, id_post) values ('${connection.escape(url)}', ${id_post});`;
+        let sql = `insert into image (image, id_post) values ('${url}', 28);`;
         const result = await Factory(sql);
-        res.json(result);
+        res.send('image added');
+    } else {
+        console.log('NO IMAGES')
     }
 }
 
-async function newVideo(req, res, id_post){
-    const {body, file} = req;
-    if(file) {
-        let url = `http://localhost:5000/videos/${file.filename}`
-        let sql = `insert into video (video, id_post) values ('${connection.escape(url)}', ${id_post});`;
-        const result = await Factory(sql);
-        res.json(result);
+async function newVideo(req, res){
+    const {body, files} = req;
+    if(files) {
+        for (const file of files) {
+            let url = `http://localhost:5000/videos/${file.filename}`
+            let sql = `insert into video (video, id_post) values ('${url}', 28);`;
+            const result = await Factory(sql);
+        }
+        //const { id_post } = result;
+        //console.log(id);
+        res.redirect('/posts/create/addDocuments');
+    } else {
+        res.send('video not received');
     }
 }
 
-async function newDocument(req, res, id_post){
-    const {body, file} = req;
-    if(file) {
-        let url = `http://localhost:5000/documents/${file.filename}`
-        let sql = `insert into document (document, id_post) values ('${connection.escape(url)}', ${id_post});`;
-        const result = await Factory(sql);
-        res.json(result);
+async function newDocument(req, res){
+    const {body, files} = req;
+    if(files) {
+        for (const file of files) {
+            let url = `http://localhost:5000/documents/${file.filename}`
+            let sql = `insert into document (document, id_post) values ('${url}', 28);`; // AGREAGAR EN ID_POST: ${connection.escape(body.id_post)}
+            const result = await Factory(sql);
+        }
+        res.redirect('/posts/myPosts');
+    } else {
+        res.send('document not received');
     }
-}
-
-async function newUser(email){
-    console.log(email);
-    let sql = `insert into user values (${email});`;
-    const result = await Factory(sql);
 }
 
 async function newPost(req, res){
-    const{text, is_public, email_user} = req.params;
-    console.log(text);
-    let sql = `insert into post (text, is_public, email_user) values (${text}, ${is_public}, ${email_user});`;
-    const result = await Factory(sql);
-    res.json(result);
-}
-
-async function createPost(req, res){
-    const {image, video, document} = req.params;
-    const post = newPost(req, res);
-    if(image){
-        newImage(req, res, post.id)
-    } else if (video){
-        newVideo(req, res, post.id)
-    } else if (document){
-        newDocument(req, res, post.id)
+    const{description, isPublic, email} = req.body;
+    var is_public = false;
+    if (isPublic == 'on'){
+        is_public = true;
+      }
+    if(!description){
+        errors.push({ msg: 'Please enter a description' });
+    } else {
+        let sql = `insert into post (text, is_public, email_user) values ('${description}', ${is_public}, '${email}');`;
+        var result = await Factory(sql);
+        //sql = `select max(id) id from post;;`;
+        //result = await Factory(sql);
+        //console.log(result);
+        //const {id} = result;
+        //console.log(id);
+        res.redirect('/posts/create/addImages')
     }
 }
-module.exports = {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newUser, createPost};
+
+module.exports = {
+    getAllData, 
+    getPostsbyUser, 
+    getPublicPosts, 
+    getNotPublicPosts, 
+    newImage, 
+    newVideo, 
+    newDocument, 
+    newPost
+};

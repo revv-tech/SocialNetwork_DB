@@ -14,13 +14,13 @@ const storage = multer.diskStorage({
     },
     filename: function(req, file, cb){
         if (file.mimetype.split('/')[0] === "image") {
-            cb(null, 'image' + Date.now() + file.mimetype.split('/')[1])
+            cb(null, 'image' + Date.now() + '.' + file.mimetype.split('/')[1])
         }
         else if (file.mimetype.split('/')[0] === "video") {
-            cb(null, 'video' + Date.now() + file.mimetype.split('/')[1])
+            cb(null, 'video' + Date.now() + '.' + file.mimetype.split('/')[1])
         }
         else{
-            cb(null, 'document' + Date.now() + file.mimetype.split('/')[1])
+            cb(null, 'document' + Date.now() + '.' + file.mimetype.split('/')[1])
         }
     }
 })

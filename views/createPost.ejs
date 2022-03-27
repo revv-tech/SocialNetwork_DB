@@ -4,39 +4,27 @@
             <h1 class="text-center mb-3">
                 Create Post
             </h1>
+            <p></p>
+            **Click on create post and then add images, videos or documents**
+            <p></p>
             <form action="/posts/create" method="POST">
                 <div class="form-group">
                     <h5 for="description">Description</h5>
                     <textarea rowss = "4" id="description" name="description" class="form-control" placeholder="Enter a Description"></textarea>
                 </div>
-                <div class="form-group">
-                    <h5 for="photos">Select Photos:</h5>
-                    <form method="post" action="proceso.php" enctype="multipart/form-data">
-                        <input type="file" id="photos" name="photos[]" multiple/>
-                    </form>
-                </div>
-                <div class="form-group">
-                    <h5 for="videos">Select Videos:</h5>
-                    <form method="post" action="proceso.php" enctype="multipart/form-data">
-                        <input type="file" id="videos" name="videos[]" multiple/>
-                    </form>
-                </div>
-                <div class="form-group">
-                    <h5 for="documents">Select Documents:</h5>
-                    <form method="post" action="proceso.php" enctype="multipart/form-data">
-                        <input type="file" id="documents" name="documents[]" multiple/>
-                    </form>
-                </div>
                 <div class="'form-group">
                     <label>Set your post public?   <input type="checkbox"  name="isPublic" id="isPublic"></label>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block" >
-                        Create Post
-                    </button>
+                <div class="'form-group">
+                    <input id="email" name="email" type="hidden" value="<%= user.email %>">
                 </div>
+                <p></p>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block" > Create Post </button>
+                </div>                          
             </form>
-            <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
         </div>
+        <p></p>
+        <a href="/posts/myPosts" class="btn btn-primary btn-block mb-2">Finish</a>
     </div>
 </div>

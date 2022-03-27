@@ -76,10 +76,15 @@ app.use(function(req, res, next) {
   });
 
 // App Routes
+
 // Index
 app.use('/',require('./src/routes/index'));
+
 // Users
 app.use('/User',require('./src/routes/User'));
+
+//Posts
+app.use('/posts', require('./src/routes/post'));
 
 //ne4j
 app.use('/user',require('./src/routes/neo4j_user'));

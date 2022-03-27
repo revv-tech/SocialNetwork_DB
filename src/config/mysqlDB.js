@@ -1,9 +1,8 @@
-/*
 // MySQL Config
 const mysql = require('mysql');
 const connection = mysql.createConnection({
     host: 'localhost',
-    database: 'project_bdii',
+    database: 'social_network_bd',
     user: 'root',
     password: '1234'
 });
@@ -15,4 +14,3 @@ connection.connect(function(error){
     }
 });
 module.exports = connection;
-*/

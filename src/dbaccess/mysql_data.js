@@ -1,5 +1,8 @@
-/*
 const{connection, Factory} = require('../Factory/query_factory');
+const storage = require('../config/multer');
+const multer = require('multer');
+const path = require('path')
+const upload = multer({storage});
 
 // Getters
 async function getAllData(req, res){
@@ -42,48 +45,90 @@ async function getNotPublicPosts(req, res){
 
 // Creates
 async function newImage(req, res){
+    const {body, files} = req;
+    if(files){
+        for (const file of files) {
+            let url = `http://localhost:5000/images/${file.filename}`
+            let sql = `insert into image (image, id_post) values ('${url}', 28);`; // Falta obtener id_post
+            const result = await Factory(sql);
+        }
+        //const { id_post } = result;
+        res.redirect('/posts/create/addVideos');
+    } else {
+        console.log('NO IMAGES')
+    }
+}
+
+// Ejemplo de como insertar una imagen en la BD
+async function addOneImage(req, res){
     const {body, file} = req;
-    if(file) {
+    if(file){
         let url = `http://localhost:5000/images/${file.filename}`
-        let sql = `insert into image (image, id_post) values ('${connection.escape(url)}', ${connection.escape(body.id_post)});`;
+        let sql = `insert into image (image, id_post) values ('${url}', 28);`;
         const result = await Factory(sql);
-        res.json(result);
+        res.send('image added');
+    } else {
+        console.log('NO IMAGES')
     }
 }
 
 async function newVideo(req, res){
-    const {body, file} = req;
-    if(file) {
-        let url = `http://localhost:5000/videos/${file.filename}`
-        let sql = `insert into video (video, id_post) values ('${connection.escape(url)}', ${connection.escape(body.id_post)});`;
-        const result = await Factory(sql);
-        res.json(result);
+    const {body, files} = req;
+    if(files) {
+        for (const file of files) {
+            let url = `http://localhost:5000/videos/${file.filename}`
+            let sql = `insert into video (video, id_post) values ('${url}', 28);`;
+            const result = await Factory(sql);
+        }
+        //const { id_post } = result;
+        //console.log(id);
+        res.redirect('/posts/create/addDocuments');
+    } else {
+        res.send('video not received');
     }
 }
 
 async function newDocument(req, res){
-    const {body, file} = req;
-    if(file) {
-        let url = `http://localhost:5000/documents/${file.filename}`
-        let sql = `insert into document (document, id_post) values ('${connection.escape(url)}', ${connection.escape(body.id_post)});`;
-        const result = await Factory(sql);
-        res.json(result);
+    const {body, files} = req;
+    if(files) {
+        for (const file of files) {
+            let url = `http://localhost:5000/documents/${file.filename}`
+            let sql = `insert into document (document, id_post) values ('${url}', 28);`; // AGREAGAR EN ID_POST: ${connection.escape(body.id_post)}
+            const result = await Factory(sql);
+        }
+        res.redirect('/posts/myPosts');
+    } else {
+        res.send('document not received');
     }
 }
 
-async function newUser(req, res){
-    const{id_user} = req.params;
-    console.log(req.params);
-    let sql = `insert into user values (${connection.escape(id_user)});`;
-    const result = await Factory(sql);
-    res.json(result);
+async function newPost(req, res){
+    const{description, isPublic, email} = req.body;
+    var is_public = false;
+    if (isPublic == 'on'){
+        is_public = true;
+      }
+    if(!description){
+        errors.push({ msg: 'Please enter a description' });
+    } else {
+        let sql = `insert into post (text, is_public, email_user) values ('${description}', ${is_public}, '${email}');`;
+        var result = await Factory(sql);
+        //sql = `select max(id) id from post;;`;
+        //result = await Factory(sql);
+        //console.log(result);
+        //const {id} = result;
+        //console.log(id);
+        res.redirect('/posts/create/addImages')
+    }
 }
 
-async function newPost(req, res){
-    const{text, is_public, id_user} = req.params;
-    let sql = `insert into post (text, is_public, id_user) values (${text}, ${is_public}, ${id_user});`;
-    const result = await Factory(sql);
-    res.json(result);
-}
-module.exports = {getAllData, getPostsbyUser, getPublicPosts, getNotPublicPosts, newImage, newVideo, newDocument, newUser, newPost};
-*/
+module.exports = {
+    getAllData, 
+    getPostsbyUser, 
+    getPublicPosts, 
+    getNotPublicPosts, 
+    newImage, 
+    newVideo, 
+    newDocument, 
+    newPost
+};

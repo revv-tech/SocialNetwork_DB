@@ -4,6 +4,7 @@ const express       = require('express');
 const router        = express.Router();
 const passport      = require('passport');
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const{connection, Factory} = require('../Factory/query_factory');
 // Password handler
 const bcrypt        = require('bcryptjs');
 // User model
@@ -13,7 +14,7 @@ router.get('/login', (req, res) => res.render('login'));
 // Register
 router.get('/register', (req, res) => res.render('register'));
 // Register Handle
-router.post('/register', (req, res) =>{
+router.post('/register', async (req, res) =>{
     
     const { name, email, password, password2, description, date, image, hoobies, interests} = req.body;
     console.log(req.body)
@@ -84,6 +85,9 @@ router.post('/register', (req, res) =>{
           });
         }
       });
+      // Ingresa el user en MySQL
+      let sql = `insert into user values ('${email}');`;
+      const result = await Factory(sql);
     }
   });
 // Login

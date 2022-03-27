@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/mysqlDB');
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
-const {newDocument, newImage, newVideo, newPost} = require('../dbaccess/mysql_data');
+const {newDocument, newImage, newVideo, newPost, getAllPosts} = require('../dbaccess/mysql_data');
 const storage = require('../config/multer');
 const multer = require('multer');
 const path = require('path')
 const upload = multer({storage});
+const{connection, Factory} = require('../Factory/query_factory');
 
 // Create Post
 router.get('/create', ensureAuthenticated, (req, res) => {
@@ -39,5 +40,24 @@ router.get('/myPosts', (req, res) => res.render('myPosts', { user: req.user }));
 
 
 // Other's Posts
-router.get('/othersPosts', ensureAuthenticated, (req, res) => res.render('othersPosts', { user: req.user }));
+router.get('/othersPosts', ensureAuthenticated, async (req, res) => {
+  // Get all posts
+  let sql_posts = 'select * from post';
+  const posts= await Factory(sql_posts);
+
+  // Get all images
+  let sql_images = 'select * from image';
+  const images= await Factory(sql_posts);
+  
+  // Get all videos
+  let sql_videos = 'select * from video';
+  const videos= await Factory(sql_posts);
+
+  // Get all documents
+  let sql_documents = 'select * from document';
+  const documents= await Factory(sql_posts);
+  res.render('othersPosts.hbs', { user: req.user, posts: posts, images:images, videos: videos, documents: documents})
+});
+
+
 module.exports = router;

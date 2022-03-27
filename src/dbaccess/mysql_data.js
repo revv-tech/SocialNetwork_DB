@@ -24,6 +24,15 @@ async function getAllData(req, res){
     res.json({images: res_images, vidoes: res_videos, documents: res_documents, posts: res_posts, users: res_users});
 }
 
+async function getAllPosts(req, res){
+    let sql_posts = 'select * from post';
+    const posts= await Factory(sql_posts);
+    console.log(posts);
+    return posts;
+}
+
+
+
 async function getPostsbyUser(req, res){
     const{id_user} = req.params;
     let sql = `select * from post where id_user = ${id_user};`;
@@ -113,7 +122,7 @@ async function newPost(req, res){
     } else {
         let sql = `insert into post (text, is_public, email_user) values ('${description}', ${is_public}, '${email}');`;
         var result = await Factory(sql);
-        //sql = `select max(id) id from post;;`;
+        //sql = `select max(id) id from post;`;
         //result = await Factory(sql);
         //console.log(result);
         //const {id} = result;
@@ -130,5 +139,6 @@ module.exports = {
     newImage, 
     newVideo, 
     newDocument, 
-    newPost
+    newPost,
+    getAllPosts
 };

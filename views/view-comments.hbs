@@ -1,0 +1,16 @@
+<h1>Comentarios</h1>
+
+<ul>
+    {{#each comentarios}}
+    <li>
+        <h3>{{remitente}} {{Comentario}}</h3>
+        <p>{{prettifyDate fecha}}</p>        
+       
+    </li>
+    {{/each}}
+</ul>
+
+<div>
+    <a href="/posts/othersPosts" class="btn btn-secondary btn-block">Back</a>
+</div>
+    

@@ -72,8 +72,9 @@ router.post('/new-message', async (req, res) =>{
     res.redirect('/conversation?receptor=' + _receptor);
 });
 
-router.post('/new-comment', async (req, res) =>{
+router.post('/new-comment/:id', async (req, res) =>{
 
+    _remitente = req.user.email
     const _timeStamp = Date.now()
     const { mensaje, remitente = _remitente, post = _post, fecha = _timeStamp} = req.body
 
@@ -86,9 +87,17 @@ router.post('/new-comment', async (req, res) =>{
     /*res.redirect('/conversation?receptor=' + _receptor);*/
 });
 
-router.get('/delete-comment/:id', async (req, res) =>{
-    await db.collection("Comentarios").doc(req.params.id).delete();
-    //res.redirect('/conversation?receptor=' + _receptor);
+router.get('/view-comments/:id', async (req, res) => {
+    console.log(req.params.id)
+    const querySnapshot = await db.collection('Comentarios').get();
+    const comentarios = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                _receptor,
+                _remitente,
+
+            }));
+    res.render('view-comments.hbs', {comentarios});
 });
 
 

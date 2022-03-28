@@ -42,22 +42,21 @@ router.get('/myPosts', (req, res) => res.render('myPosts', { user: req.user }));
 // Other's Posts
 router.get('/othersPosts', ensureAuthenticated, async (req, res) => {
   // Get all posts
+  
   let sql_posts = 'select * from post';
   const posts= await Factory(sql_posts);
 
   // Get all images
   let sql_images = 'select * from image';
-  const images= await Factory(sql_posts);
+  const images= await Factory(sql_images);
   
   // Get all videos
   let sql_videos = 'select * from video';
-  const videos= await Factory(sql_posts);
+  const videos= await Factory(sql_videos);
 
   // Get all documents
   let sql_documents = 'select * from document';
-  const documents= await Factory(sql_posts);
-
-  console.log(posts);
+  const documents= await Factory(sql_documents);
   
   res.render('othersPosts.ejs', { user: req.user, posts: posts, images:images, videos: videos, documents: documents})
 });

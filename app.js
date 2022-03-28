@@ -93,13 +93,15 @@ app.use('/posts', require('./src/routes/post'));
 app.use('/user',require('./src/routes/neo4j_user'));
 app.use('/friends',require('./src/routes/friendship'));
 
+
+
 app.listen(port, function()  {
     console.log(`Server running on port: ${port}`);
 });
 
 app.use(express.static('static'));
 // PATH STEVEN
-// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\USER\OneDrive\Escritorio\Message-Firebase\firebase.json
+// GOOGLE_APPLICATION_CREDENTIALS= C:\Users\USER\OneDrive\Documents\GitHub\SocialNetwork_DB\firebase.json
 // PATH Marco
 // GOOGLE_APPLICATION_CREDENTIALS= C:\Users\Marco\Desktop\DocumentosTEC\Github\SocialNetwork_DB\firebase.json
 // PATH jarod

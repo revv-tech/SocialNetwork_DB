@@ -4,7 +4,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     database: 'social_network_bdii',
     user: 'root',
-    password: 'Antonio99'
+    password: '1234'
 });
 connection.connect(function(error){
     if(error){

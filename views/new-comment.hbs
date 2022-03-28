@@ -1,0 +1,19 @@
+<h1>Write a comment</h1>
+
+<form action="/new-comment/{{id}}" method="POST">
+
+<div>
+    <label for="mensaje">Write your message: </label>
+    <p></p>
+    <!---<input type="text" name="mensaje" placeholder="Mensaje" id="mensaje" value="{{mensaje.mensaje}}" size="160">-->
+    <input type="text" class="form-control"  name="mensaje" value="" id="mensaje" placeholder="Message" >
+</div>
+
+<div>
+     <p></p>
+    <button class="btn btn-primary btn-block mb-2"> Send</button>
+    <a href="/posts/othersPosts" class="btn btn-secondary btn-block">Back</a>
+</div>
+    
+
+</form>

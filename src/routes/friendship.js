@@ -4,6 +4,7 @@ const db = require('../dbaccess/neo4j');
 
 router.post('/request', (req, res) => request(req, res));
 router.post('/accept', (req, res) => accept(req, res));
+router.post('/reject', (req, res) => reject(req, res));
 router.post('/remove', (req, res) => remove(req, res));
 
 async function request (req, res) {
@@ -18,6 +19,14 @@ async function accept (req, res) {
     console.log(req.body)
     const { guid1, guid2} = req.body;
     response = await db.acceptFriendship(guid1, guid2)
+    console.log(response)
+    res.send(response)
+}
+
+async function reject (req, res) {
+    console.log(req.body)
+    const { guid1, guid2} = req.body;
+    response = await db.rejectFriendship(guid1, guid2)
     console.log(response)
     res.send(response)
 }

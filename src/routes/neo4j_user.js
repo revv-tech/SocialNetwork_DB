@@ -7,7 +7,7 @@ router.post('/add', (req, res) => add(req, res));
 router.post('/remove', (req, res) => remove(req, res));
 router.post('/find', (req, res) => find(req, res));
 router.post('/edit', (req, res) => edit(req, res));
-router.post('/findRequest', (req, res) => findRequest(req, res));
+router.post('/findRequests', (req, res) => findRequests(req, res));
 router.post('/findFriends', (req, res) => findFriends(req, res));
   
 
@@ -29,7 +29,11 @@ async function find (req, res) {
     console.log(req.body)
     const {guid} = req.body;
     const response = await db.findUser(guid)
-    res.send(response)
+    if (response.success){
+        res.render('user.ejs', {response});
+    } else {
+        res.redirect('/dashboard');
+    }
 }
 
 //de momento no usarlo
@@ -40,10 +44,10 @@ async function edit (req, res) {
     res.send(response)
 }
 
-async function findRequest (req, res) {
+async function findRequests (req, res) {
     console.log(req.body)
     const {guid} = req.body;
-    const response = await db.findRequest(guid)
+    const response = await db.findRequests(guid)
     res.send(response)
 }
 

@@ -11,6 +11,8 @@ const User          = require('../model/UserMongoDB');
 router.get('/login', (req, res) => res.render('login'));
 // Register
 router.get('/register', (req, res) => res.render('register'));
+//neo4j
+const dbNeo4j = require('../dbaccess/neo4j')
 
 // Register Handle
 router.post('/register', (req, res) =>{
@@ -77,6 +79,7 @@ router.post('/register', (req, res) =>{
                     'success_msg',
                     'You are now registered and can log in'
                   );
+                  dbNeo4j.addUser(name, email)
                   res.redirect('/User/login');
                 })
                 .catch(err => console.log(err));
@@ -85,6 +88,7 @@ router.post('/register', (req, res) =>{
         }
       });
     }
+    
   });
 // Login
 router.post('/login', (req, res, next) => {

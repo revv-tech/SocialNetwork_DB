@@ -1,22 +1,33 @@
 <h1 class="text-center mb-3">
     <i class="fas fa-home fa"></i> Feed
 </h1>
+
 <h3 class="text-center mb-3">Welcome <%= user.name %></h3>
+<p class="text-center">
+    <img src="/images/image1648444738473.jpeg" width="200" height="200" alt="centered image">
+</p>
+
+
 <p class="lead mb-3" class="rounded mx-auto d-block" alt="...">Description </p>
 <p> <%= user.description %></p>
+
+<a href="/User/updateProfilePic" class="btn btn-primary btn-block mb-2"
+        >Upload Profile Picture</a>
+
 <a href="/chats" class="btn btn-primary btn-block mb-2"
-          >Messages</a>
+        >Messages</a>
 
 <a href="/posts/create" class="btn btn-primary btn-block mb-2"
-          >New Post</a>
+        >New Post</a>
           
 <a href="/posts/myPosts" class="btn btn-primary btn-block mb-2"
-          >My Posts</a>
+        >My Posts</a>
 
 <a href="/posts/othersPosts" class="btn btn-primary btn-block mb-2"
-          >Others' Posts</a>
+        >Others' Posts</a>
 
 <a href="/User/settings" class="btn btn-primary btn-block mb-2"
-          >Settings</a>
+        >Settings</a>
 
-<a href="/User/logout" class="btn btn-secondary btn-block mb-2">Logout</a>
+<a href="/User/logout" class="btn btn-secondary btn-block mb-2"
+        >Logout</a>

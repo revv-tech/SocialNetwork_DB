@@ -4,7 +4,15 @@ const express       = require('express');
 const router        = express.Router();
 const passport      = require('passport');
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const pool = require('../config/mysqlDB');
+const {newImagePP, newImagePPUpdate} = require('../dbaccess/mysql_data');
+const storage = require('../config/multer');
+const multer = require('multer');
+const path = require('path')
+const upload = multer({storage});
 const{connection, Factory} = require('../Factory/query_factory');
+
+
 // Password handler
 const bcrypt        = require('bcryptjs');
 // User model
@@ -16,8 +24,8 @@ router.get('/register', (req, res) => res.render('register'));
 // Register Handle
 router.post('/register', async (req, res) =>{
     
-    const { name, email, password, password2, description, date, image, hoobies, interests} = req.body;
-    console.log(req.body)
+    const { name, email, password, password2, description, date, hoobies, interests} = req.body;
+    
     let errors = [];
   
     if (!name || !email || !password || !password2 || !description) {
@@ -51,7 +59,6 @@ router.post('/register', async (req, res) =>{
             password,
             description,
             date,
-            image,
             hoobies,
             interests
           });
@@ -62,7 +69,6 @@ router.post('/register', async (req, res) =>{
             password,
             description,
             date,
-            image,
             hoobies,
             interests
           });
@@ -88,8 +94,12 @@ router.post('/register', async (req, res) =>{
       // Ingresa el user en MySQL
       let sql = `insert into user values ('${email}');`;
       const result = await Factory(sql);
+      // Ingresa el user en MySQL
+      let sql_2 = `insert into profilepic (email_user, image) values ('${email}', '');`;
+      const result_2 = await Factory(sql_2);
     }
   });
+  
 // Login
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
@@ -109,7 +119,7 @@ router.get('/logout', (req, res) => {
 router.get('/settings', ensureAuthenticated,  async (req, res) => {
   res.render('settings', { user: req.user });
 });
-
+// Settings Handler
 router.post('/settings', ensureAuthenticated, (req, res) => {
   const { name, email, emailPrivate , password, password2, description, descriptionPrivate , date, datePrivate, hoobies, hoobiesPrivate, interests, interestsPrivate} = req.body;
   var isEmailPublic = false;
@@ -181,6 +191,16 @@ router.post('/settings', ensureAuthenticated, (req, res) => {
 
 });
 
+
+// Profile Picture
+router.get('/updateProfilePic', ensureAuthenticated,  async (req, res) => {
+  res.render('updateProfilePic', { user: req.user });
+});
+
+// Profile Picture Handler
+router.post('/updateProfilePic', upload.single('images'), newImagePPUpdate, async (req, res) => {
+  res.render('updateProfilePic', { user: req.user });
+});
 
 
 module.exports = router;

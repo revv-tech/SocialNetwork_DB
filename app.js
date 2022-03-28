@@ -11,6 +11,7 @@ const flash         = require('connect-flash');
 const session       = require('express-session');
 
 //Agregado Steven
+app.use( express.static( "views" ) );
 const morgan = require('morgan');
 const path = require('path');
 const exphbs = require("express-handlebars");
@@ -89,6 +90,8 @@ app.use('/posts', require('./src/routes/post'));
 //ne4j
 app.use('/user',require('./src/routes/neo4j_user'));
 app.use('/friends',require('./src/routes/friendship'));
+
+
 
 app.listen(port, function()  {
     console.log(`Server running on port: ${port}`);

@@ -70,32 +70,46 @@ router.post('/new-message', async (req, res) =>{
     res.redirect('/conversation?receptor=' + _receptor);
 });
 
-router.post('/new-comment/:id', async (req, res) =>{
+router.get('/write-comment/:id', async (req, res) => {
+    const id = req.params.id
+    res.render('new-comment.hbs', {id});
 
+
+
+});
+
+router.post('/new-comment/:id', ensureAuthenticated, async (req, res) =>{
+
+    const postID = req.params.id
     _remitente = req.user.email
+    console.log(_remitente)
     const _timeStamp = Date.now()
-    const { mensaje, remitente = _remitente, post = _post, fecha = _timeStamp} = req.body
+    const { mensaje, remitente = _remitente, post = postID, fecha = _timeStamp} = req.body
 
     await db.collection('Comentarios').add({
         remitente: remitente,
-        mensaje: mensaje,
-        post: post,
+        Comentario: mensaje,
+        idMySQL: post,
         fecha: fecha,
     });
-    /*res.redirect('/conversation?receptor=' + _receptor);*/
+    res.redirect('/posts/othersPosts')
 });
 
 router.get('/view-comments/:id', async (req, res) => {
-    console.log(req.params.id)
     const querySnapshot = await db.collection('Comentarios').get();
-    const comentarios = querySnapshot.docs.map(doc => ({
+    const midQuery = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
-                _receptor,
-                _remitente,
 
             }));
-    res.render('view-comments.hbs', {comentarios});
+    const idSearched = req.params.id
+    var listaComentarios = []
+    for(i=0; i<midQuery.length; i++){
+        if(midQuery[i].idMySQL == idSearched)
+            listaComentarios[i] = midQuery[i]
+    }
+    console.log(listaComentarios)
+    res.render('view-comments.hbs', {comentarios: listaComentarios, idSearched: idSearched});
 });
 
 

@@ -56,8 +56,14 @@ router.get('/othersPosts', ensureAuthenticated, async (req, res) => {
   // Get all documents
   let sql_documents = 'select * from document';
   const documents= await Factory(sql_posts);
-  res.render('othersPosts.hbs', { user: req.user, posts: posts, images:images, videos: videos, documents: documents})
+
+  console.log(posts);
+  
+  res.render('othersPosts.ejs', { user: req.user, posts: posts, images:images, videos: videos, documents: documents})
 });
+
+// Add Profile pic
+
 
 
 module.exports = router;

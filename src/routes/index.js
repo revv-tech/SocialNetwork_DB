@@ -14,7 +14,6 @@ var _post = 0
 
 // Welcome Page
 router.get('/', (req, res) => res.render('welcome'));
-
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => { 
     res.render('dashboard', { user: req.user });
@@ -23,11 +22,10 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 
 //Agregado Steven
 router.get('/chats', ensureAuthenticated, (req, res) => {
-    _remitente = req.user.email;
-    console.log(req.user.name);
+    _remitente = req.user.name;
+    //console.log(req.user.name);
     res.render('chats.ejs', { user: req.user })
 });
-
 
 
 router.get('/conversation', async (req, res) => {

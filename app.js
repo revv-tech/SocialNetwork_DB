@@ -11,6 +11,7 @@ const flash         = require('connect-flash');
 const session       = require('express-session');
 
 //Agregado Steven
+
 const morgan = require('morgan');
 const path = require('path');
 const exphbs = require("express-handlebars");
@@ -76,6 +77,8 @@ app.use(function(req, res, next) {
   });
 
 // App Routes
+//IMAGES MIDDLEWARE
+app.use(express.static('static'));
 
 // Index
 app.use('/',require('./src/routes/index'));
@@ -93,6 +96,8 @@ app.use('/friends',require('./src/routes/friendship'));
 app.listen(port, function()  {
     console.log(`Server running on port: ${port}`);
 });
+
+app.use(express.static('static'));
 // PATH STEVEN
 // GOOGLE_APPLICATION_CREDENTIALS= C:\Users\USER\OneDrive\Escritorio\Message-Firebase\firebase.json
 // PATH Marco

@@ -30,8 +30,14 @@ async function getAllPosts(req, res){
     console.log(posts);
     return posts;
 }
-
-
+// Get profile pic
+async function getProfilePic(req, res){
+    const{email_user} = req.params;
+    let sql = `select * from post where email_user = ${email_user};`;
+    const posts= await Factory(sql_posts);
+    console.log(posts);
+    return posts;
+}
 
 async function getPostsbyUser(req, res){
     const{id_user} = req.params;
@@ -63,6 +69,36 @@ async function newImage(req, res){
         }
         //const { id_post } = result;
         res.redirect('/posts/create/addVideos');
+    } else {
+        console.log('NO IMAGES')
+    }
+}
+
+
+// Profile Pic Upload
+async function newImagePP(req, res, email){
+    const {body, file} = req;
+    
+    if(file){
+        let url = `http://localhost:5000/images/${file.filename}`
+        let sql = `insert into profilepic (image, email_user) values ('${url}', '${email}');;` // Falta obtener id_post
+        const result = await Factory(sql);
+        
+        res.redirect('/dashboard');
+    } else {
+        console.log('NO IMAGES')
+    }
+}
+
+// Profile Pic Update
+async function newImagePPUpdate(req, res){
+    const {body, file} = req;
+    
+    if(file){
+        let url = `http://localhost:5000/images/${file.filename}`
+        let sql = `UPDATE profilepic SET image = '${url}' WHERE email_user = '${req.user.email}';` // Falta obtener id_post
+        const result = await Factory(sql);
+        res.redirect('/dashboard');
     } else {
         console.log('NO IMAGES')
     }
@@ -140,5 +176,7 @@ module.exports = {
     newVideo, 
     newDocument, 
     newPost,
-    getAllPosts
+    getAllPosts,
+    newImagePP,
+    newImagePPUpdate
 };

@@ -1,15 +1,18 @@
 <div class="container p-5">
+    <h1 class="text-center mb-3">
+        <i class="fas fa-home fa"></i> Public Posts
+    </h1>
     <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
-    <div class="row">
+    
         <% var postsUser = posts; %>
         <% for(var i = 0; i < postsUser.length; i++) { %>
-            <div class="col-md-10">
+            <div class="center-text">
                 <div class="card text-center">
                     <div class="card-body">
                         <h2 class="card-title text-uppercase">
                             <%=  user.email %>
                         </h2>
-                        <p class="m-2"><%= postsUser[i] %></p>
+                        
                         <h5> <%= postsUser[i].text %></h5>
                         
                             <h3>Photos</h3>
@@ -38,5 +41,5 @@
                 </div>
             </div>
         <% } %>
-    </div>
+    
 </div>

@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
         }
     },
     filename: function(req, file, cb){
+        
         if (file.mimetype.split('/')[0] === "image") {
             cb(null, 'image' + Date.now() + '.' + file.mimetype.split('/')[1])
         }

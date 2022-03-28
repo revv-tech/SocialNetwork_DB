@@ -29,10 +29,6 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  image: {
-    type: Buffer,
-    contentType: String
-  },
   imagePrivate: {
     type: Boolean,
     default: true

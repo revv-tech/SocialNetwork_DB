@@ -3,6 +3,16 @@
 const express       = require('express');
 const router        = express.Router();
 const passport      = require('passport');
+const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const pool = require('../config/mysqlDB');
+const {newImagePP, newImagePPUpdate} = require('../dbaccess/mysql_data');
+const storage = require('../config/multer');
+const multer = require('multer');
+const path = require('path')
+const upload = multer({storage});
+const{connection, Factory} = require('../Factory/query_factory');
+
+
 // Password handler
 const bcrypt        = require('bcryptjs');
 // User model
@@ -15,10 +25,10 @@ router.get('/register', (req, res) => res.render('register'));
 const dbNeo4j = require('../dbaccess/neo4j')
 
 // Register Handle
-router.post('/register', (req, res) =>{
+router.post('/register', async (req, res) =>{
     
-    const { name, email, password, password2, description, date, image, hoobies, interests} = req.body;
-    console.log(req.body)
+    const { name, email, password, password2, description, date, hoobies, interests} = req.body;
+    
     let errors = [];
   
     if (!name || !email || !password || !password2 || !description) {
@@ -52,7 +62,6 @@ router.post('/register', (req, res) =>{
             password,
             description,
             date,
-            image,
             hoobies,
             interests
           });
@@ -63,7 +72,6 @@ router.post('/register', (req, res) =>{
             password,
             description,
             date,
-            image,
             hoobies,
             interests
           });
@@ -79,6 +87,7 @@ router.post('/register', (req, res) =>{
                     'success_msg',
                     'You are now registered and can log in'
                   );
+                   dbNeo4j.addUser(name, email)
                   dbNeo4j.addUser(name, email)
                   res.redirect('/User/login');
                 })
@@ -87,9 +96,16 @@ router.post('/register', (req, res) =>{
           });
         }
       });
+      // Ingresa el user en MySQL
+      let sql = `insert into user values ('${email}');`;
+      const result = await Factory(sql);
+      // Ingresa el user en MySQL
+      let sql_2 = `insert into profilepic (email_user, image) values ('${email}', '');`;
+      const result_2 = await Factory(sql_2);
     }
     
   });
+  
 // Login
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
@@ -105,8 +121,92 @@ router.get('/logout', (req, res) => {
   res.redirect('/User/login');
 });
 
+// Settings
+router.get('/settings', ensureAuthenticated,  async (req, res) => {
+  res.render('settings', { user: req.user });
+});
+// Settings Handler
+router.post('/settings', ensureAuthenticated, (req, res) => {
+  const { name, email, emailPrivate , password, password2, description, descriptionPrivate , date, datePrivate, hoobies, hoobiesPrivate, interests, interestsPrivate} = req.body;
+  var isEmailPublic = false;
+  var isDescriptionPublic = false;
+  var isDatePublic = false;
+  var ishoobiesPublic = false;
+  var isinterestsPublic = false;
+  
+  
+  if (emailPrivate == 'on'){
+    isEmailPublic = true;
+  }
+  if (descriptionPrivate == 'on'){
+    isDescriptionPublic = true;
+  }
+  if (datePrivate == 'on'){
+    isDatePublic = true;
+  }
+  if (hoobiesPrivate == 'on'){
+    ishoobiesPublic = true;
+  }
+  if (interestsPrivate == 'on'){
+    isinterestsPublic = true;
+  }
+  
+  if ( !password && !password2) {
+    User.updateOne({email: email}, {
+      $set : {
+        name: name,
+        emailPrivate: isEmailPublic,
+        description: description,
+        descriptionPrivate: isDescriptionPublic,
+        date: date,
+        datePrivate: isDatePublic,
+        hoobies: hoobies,
+        hoobiesPrivate: ishoobiesPublic,
+        interests: interests,
+        interestsPrivate: isinterestsPublic
+      }
+      }).then(
+      res.redirect('/User/settings')
+    );
+  } if ( password || password2) {
+      if ( password == password2) {
+
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(password, salt, (err, hash) => {
+            if (err) throw err;
+            var encryptedPass = hash;
+            User.updateOne({email: email}, {
+              $set : {
+                password: encryptedPass
+              }
+              }).then(
+              res.redirect('/User/settings')
+            );
+          });
+        });
+
+        
+    }else{
+      res.redirect('/User/settings');
+    }
+  }
+  
+  
+  
+  
+
+});
 
 
+// Profile Picture
+router.get('/updateProfilePic', ensureAuthenticated,  async (req, res) => {
+  res.render('updateProfilePic', { user: req.user });
+});
+
+// Profile Picture Handler
+router.post('/updateProfilePic', upload.single('images'), newImagePPUpdate, async (req, res) => {
+  res.render('updateProfilePic', { user: req.user });
+});
 
 
 module.exports = router;

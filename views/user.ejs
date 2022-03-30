@@ -1,0 +1,54 @@
+<h1 class="text-center mb-3">
+    <i></i> <%= response.user.name %>'s Profile 
+</h1>
+<% if (!response.user.imagePrivate) {%>
+    <p class="text-center">
+        <img src="/images/image1648444738473.jpeg" width="200" height="200" alt="centered image">
+    </p>
+<% } %>
+
+<div class="text-center form-group">
+    <h5 for="name">Name: <%=response.user.name%></h5>
+<div class="form-group">
+    <h5 for="email">Email: <%=response.user.email%></h5>
+<div class="form-group">
+    <h5 for="description">Description: <%=response.user.description%></h5>
+<div class="form-group">
+    <h5 for="date">Birthdate: <%=response.user.date%></h5>
+<div class="form-group">
+    <h5 for="date">Interests: <%=response.user.interests%></h5>   
+<div class="form-group">
+    <h5 for="date">Hobbies: <%=response.user.hoobies%></h5>  
+
+<% if (!response.areFriends) {%>
+    <form action="/friends/request" method="POST">
+        <input type = "hidden" name = "guid1Requestor" value = "<%= user.email %>" />
+        <input type = "hidden" name = "guidFind" value = "<%= response.emailReq %>" />
+
+        <div class="input-group-append">
+                <button class="btn btn-primary btn-block mb-2" id="searchBTN"
+                 
+                <% if (response.isRequest) {%>
+                    disabled
+                <% } %>
+                type="submit">
+                
+                
+                Request Friendship</button>
+        </div>
+        </div>
+    </form>
+<% } else { %>
+    <form action="/friends/remove" method="POST">
+        <input type = "hidden" name = "guid1Requestor" value = "<%= user.email %>" />
+        <input type = "hidden" name = "guidFind" value = "<%= response.emailReq %>" />
+        <div class="input-group-append">
+                <button class="btn btn-primary btn-block mb-2" id="searchBTN" type="submit">Remove Friendship</button>
+        </div>
+        </div>
+    </form>
+<% } %>
+
+<div>
+    <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
+</div>

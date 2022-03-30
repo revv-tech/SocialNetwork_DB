@@ -11,6 +11,7 @@ exports.findUser = findUser;
 exports.editUser = editUser;
 exports.findFriends = findFriends;
 exports.findRequests = findRequests;
+exports.areFriends = areFriends;
 
 async function addUser (name, guid) {
     const response = {}
@@ -18,7 +19,7 @@ async function addUser (name, guid) {
     response.errmsg = ""
     response.response = {}
     try{
-        const writeQuery = `CREATE (u:User {Guid: $guid, Name: $name, Status : "E"}) 
+        const writeQuery = `CREATE (u:User {Guid: $guid, Name: $name, Status : "ENABLE"}) 
                             RETURN u.Guid AS guid, u.Name AS name, u.Status AS status`
 
         const writeResult = await session.writeTransaction(tx =>
@@ -47,7 +48,7 @@ async function removeUser (guid) {
     response.response = {}
     try{
         const writeQuery = `MATCH (u {Guid: $guid}) 
-                            SET u.Status = "D" 
+                            SET u.Status = "DISABLE" 
                             RETURN u.Name AS name, u.Status AS status`
 
         const writeResult = await session.writeTransaction(tx =>
@@ -69,7 +70,7 @@ async function removeUser (guid) {
 
 async function findUser (guid) {
     const response = {}
-    response.success = true
+    response.success = false
     response.errmsg = ""
     response.response = {}
     try{
@@ -84,6 +85,7 @@ async function findUser (guid) {
         readResult.records.forEach(
             record => {
                 response.guid = guid
+                response.success = true
                 response.name = record.get('name')
                 response.status = record.get('status')
             }
@@ -125,14 +127,14 @@ async function findFriends (guid) {
     response.errmsg = ""
     response.response = []
     try{
-        const writeQuery = `MATCH (u:User {Guid : $guid})-[F:Friendship]->(uFriends) 
-                            WHERE uFriends.Status = "E" and F.status = "E" 
+        const readQuery = `MATCH (u:User {Guid : $guid})-[F:Friendship]->(uFriends) 
+                            WHERE uFriends.Status = "ENABLE" and F.status = "ENABLE" 
                             RETURN DISTINCT uFriends.Guid AS guid, uFriends.Name AS name, uFriends.Status AS status`
 
-        const writeResult = await session.writeTransaction(tx =>
-            tx.run(writeQuery, { guid })
+        const readResult = await session.readTransaction(tx =>
+            tx.run(readQuery, { guid })
         )
-        writeResult.records.forEach(record => {
+        readResult.records.forEach(record => {
             const item = {} 
             item.guid = record.get('guid')
             item.name = record.get('name')
@@ -147,25 +149,54 @@ async function findFriends (guid) {
     } 
     return response
 }
+
 //cambiar
 async function findRequests (guid) {
     const response = {}
     response.success = true
     response.errmsg = ""
-    response.response = []
+    response.requests = []
     try{
-        const writeQuery = `MATCH (ur:User)-[r:Friendship]->(u:User {Guid :"285"}) 
-                            RETURN DISTINCT ur.Guid AS guid, ur.Name AS name, ur.Status AS status`
+        const readQuery = `MATCH (ur:User)-[r:Friendship]->(u:User {Guid : $guid}) 
+                            WHERE not r.accepted AND r.status = "REQUESTED"
+                            RETURN DISTINCT ur.Guid AS requester, ur.Name AS name, ur.Status AS status`
 
-        const writeResult = await session.writeTransaction(tx =>
-            tx.run(writeQuery, { guid })
+        const readResult = await session.readTransaction(tx =>
+            tx.run(readQuery, { guid })
         )
-        writeResult.records.forEach(record => {
+        readResult.records.forEach(record => {
             const item = {} 
-            item.guid = record.get('guid')
+            item.requester = record.get('requester')
             item.name = record.get('name')
             item.status = record.get('status')
-            response.response = response.response.concat(item)
+            response.requests = response.requests.concat(item)
+            }
+        )
+
+    } catch (error) {
+        response.success = false
+        response.errmsg = error
+    } 
+    return response
+}
+
+async function areFriends (guid, guid2) {
+    const response = {}
+    response.success = true
+    response.errmsg = ""
+    response.areFriends = false
+    try{
+        const readQuery = `MATCH (u:User {Guid : $guid})-[F:Friendship]->(u2: User {Guid: $guid2}) 
+                            WHERE F.status = "ENABLE" AND F.accepted 
+                            RETURN COUNT(F) AS count`
+
+        const readResult = await session.readTransaction(tx =>
+            tx.run(readQuery, { guid, guid2 })
+        )
+        readResult.records.forEach(record => {
+            const item = {} 
+            let count= record.get('count')
+            response.areFriends = count > 0
             }
         )
 
@@ -179,36 +210,90 @@ async function findRequests (guid) {
 //friendship
 exports.requestFriendship = requestFriendship;
 exports.acceptFriendship = acceptFriendship;
+exports.rejectFriendship = rejectFriendship;
 exports.removeFriendship = removeFriendship;
+exports.isRequest = isRequest;
+
+async function isRequest (guid1Requestor, guid2) {
+    const response = {}
+    response.success = true
+    response.errmsg = ""
+    response.isRequest = false
+    count = 0
+    try{
+        //validar que no haya otro request activo antes
+        const readQuery =   `MATCH (u:User)-[r:Friendship]->(u2:User) 
+                            where u.Guid = $guid1Requestor AND u2.Guid = $guid2 AND 
+                            r.accepted = false AND r.status = "REQUESTED" 
+                            RETURN COUNT(r) AS count`
+
+        const readResult = await session.readTransaction(tx =>
+            tx.run(readQuery,  {guid1Requestor, guid2 })
+        )
+
+        readResult.records.forEach(
+            record => {
+                count = record.get('count')
+            }
+        )    
+        
+        response.isRequest = count > 0
+
+    } catch (error) {
+        response.success = false
+        response.errmsg = error
+    } 
+    return response
+}
 
 async function requestFriendship (guid1Requestor, guid2) {
     const response = {}
     response.success = true
     response.errmsg = ""
     response.response = {}
+    count = 0
     try{
         //validar que no haya otro request activo antes
+        const readQuery =   `MATCH (u:User)-[r:Friendship]->(u2:User) 
+                            where u.Guid = $guid1Requestor AND u2.Guid = $guid2 AND 
+                            r.accepted = false AND r.status = "REQUESTED" 
+                            RETURN COUNT(r) AS count`
 
-
-
-        const writeQuery = `MATCH
-                                (u:User),
-                                (u2:User)
-                            WHERE u.Guid = $guid1Requestor AND u2.Guid = $guid2
-                            CREATE (u)-[r:Friendship {accepted: false, date: date(), status: "R" }]->(u2)
-                            RETURN DISTINCT r.accepted AS accepted, r.date AS date, r.status AS status`
-
-        const writeResult = await session.writeTransaction(tx =>
-            tx.run(writeQuery, {guid1Requestor, guid2 })
+        const readResult = await session.readTransaction(tx =>
+            tx.run(readQuery,  {guid1Requestor, guid2 })
         )
-        writeResult.records.forEach(record => {
-            response.response.guidrequestor = guid1Requestor
-            response.response.guid2 = guid2
-            response.response.accepted = record.get('accepted')
-            response.response.date = record.get('date')
-            response.response.status = record.get('status')
+
+        readResult.records.forEach(
+            record => {
+                count = record.get('count')
             }
-        )   
+        )
+
+        if (count == 0) {
+            const writeQuery = `MATCH
+                                    (u:User),
+                                    (u2:User)
+                                WHERE u.Guid = $guid1Requestor AND u2.Guid = $guid2
+                                CREATE (u)-[r:Friendship {accepted: false, date: date(), status: "REQUESTED" }]->(u2)
+                                RETURN r.accepted AS accepted, r.date AS date, r.status AS status`
+
+            const writeResult = await session.writeTransaction(tx =>
+            tx.run(writeQuery, {guid1Requestor, guid2 })
+            )
+            writeResult.records.forEach(record => {
+                response.response.guidrequestor = guid1Requestor
+                response.response.guid2 = guid2
+                response.response.accepted = record.get('accepted')
+                response.response.date = record.get('date')
+                response.response.status = record.get('status')
+                }
+            )   
+        } else {
+            response.success = false
+            response.errmsg = "There is already a request"
+
+        }
+        
         
 
     } catch (error) {
@@ -227,20 +312,23 @@ async function acceptFriendship (guid1, guid2) {
 
     try{
 
-        const writeQuery = `MATCH
-                                (u:User),
-                                (u2:User)
-                            WHERE u.Guid = $guid1 AND u2.Guid = $guid2
-                            CREATE (u)-[r:Friendship {date: date(), status: "E" }]->(u2)
-                            RETURN u, u2, r`
+        const writeQuery = `MATCH (u1:User {Guid: $guid2})-[r:Friendship {accepted: false, status: "REQUESTED"}]->(u2:User {Guid : $guid1}) 
+                            SET r.accepted = true , r.status = "ENABLE"
+                            CREATE (u2)-[r2:Friendship {accepted: r.accepted, date: r.date, status: r.status }]->(u1)
+                            RETURN r.accepted AS accepted, r.status AS status`
 
         //cambier el set de los request
 
         const writeResult = await session.writeTransaction(tx =>
             tx.run(writeQuery, {guid1, guid2 })
         )
-        console.log(response)
-        res.send (response)
+        writeResult.records.forEach(record => {
+            response.response.guid1 = guid1//es el que acepta, 
+            response.response.guid2 = guid2//este es el que hizo el reques
+            response.response.accepted = record.get('accepted')
+            response.response.status = record.get('status')
+            }
+        )   
 
     } catch (error) {
         response.success = false
@@ -248,6 +336,41 @@ async function acceptFriendship (guid1, guid2) {
     } 
     return response
 }
+
+
+async function rejectFriendship (guid1, guid2) {
+    
+    const response = {}
+    response.success = true
+    response.errmsg = ""
+    response.response = {}
+
+    try{
+
+        const writeQuery = `MATCH (ur:User {Guid: $guid2})-[r:Friendship {accepted: false, status: "REQUESTED"}]->(u:User {Guid : $guid1}) 
+                            SET r.status = "REJECTED"
+                            RETURN r.accepted AS accepted, r.status AS status`
+
+        const writeResult = await session.writeTransaction(tx =>
+            tx.run(writeQuery, {guid1, guid2 })
+        )
+
+
+        writeResult.records.forEach(record => {
+            response.response.guid1 = guid1
+            response.response.guid2 = guid2
+            response.response.accepted = record.get('accepted')
+            response.response.status = record.get('status')
+            }
+        )   
+
+    } catch (error) {
+        response.success = false
+        response.errmsg = error
+    } 
+    return response
+}
+
 
 async function removeFriendship (guid1, guid2, res) {
     const response = {}
@@ -258,22 +381,31 @@ async function removeFriendship (guid1, guid2, res) {
     try{
         //validar que no hayan otras antes
 
-        const writeQuery = `MATCH
-                                (u:User),
-                                (u2:User)
-                            WHERE u.Guid = $guid1 AND u2.Guid = $guid2
-                            CREATE (u)-[r:FriendshipRequest {accepted: false, date: date(), status: "D" }]->(u2)
-                            RETURN u, u2, r`
+        const writeQuery = `MATCH (ur:User {Guid: $guid1})-[r:Friendship {accepted: true, status: "ENABLE"}]->(u:User {Guid : $guid2}) 
+                            SET  r.accepted = false , r.status = "DISABLE"
+                            RETURN r.accepted AS accepted, r.status AS status`
 
         const writeResult = await session.writeTransaction(tx =>
             tx.run(writeQuery, {guid1, guid2 })
         )
-        console.log(response)
-        res.send (response)
 
+        const writeQuery2 = `MATCH (ur:User {Guid: $guid2})-[r:Friendship {accepted: true, status: "ENABLE"}]->(u:User {Guid : $guid1}) 
+                            SET  r.accepted = false , r.status = "DISABLE"
+                            RETURN r.accepted AS accepted, r.status AS status`
+
+        const writeResult2 = await session.writeTransaction(tx =>
+            tx.run(writeQuery2, {guid1, guid2 })
+        )
+        writeResult2.records.forEach(record => {
+            response.response.guid1 = guid1
+            response.response.guid2 = guid2
+            response.response.accepted = record.get('accepted')
+            response.response.status = record.get('status')
+            }
+        ) 
     } catch (error) {
         response.success = false
-        response.ErrMsg = error
+        response.errmsg = error
     } 
     return response
 }

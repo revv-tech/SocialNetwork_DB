@@ -7,9 +7,32 @@
     <img src="/images/image1648444738473.jpeg" width="200" height="200" alt="centered image">
 </p>
 
-
+<%= include ("./messages"); %>
 <p class="lead mb-3" class="rounded mx-auto d-block" alt="...">Description </p>
 <p> <%= user.description %></p>
+<%= include ("./messages"); %>
+<form action="/user/find" method="POST">
+        <div class="input-group">
+                <input type="guid" 
+                        class="form-control" 
+                        name="guidFind" 
+                        placeholder="Enter your friend mail" 
+                        value="<%= typeof email != 'undefined' ? email : '' %>"
+                        >
+                <div class="input-group-append">
+                        <button class="btn btn-primary btn-block mb-2" id="searchBTN" type="submit">Search Friend</button>
+                </div>
+        </div>
+</form>
+
+<form action="/user/findRequests" method="POST">
+        <input type = "hidden" name = "guid" value = "<%= user.email %>" />
+        <div class="input-group-append">
+                <button class="btn btn-primary btn-block mb-2" id="searchBTN" type="submit">Requests</button>
+        </div>
+        
+</form>
+
 
 <a href="/User/updateProfilePic" class="btn btn-primary btn-block mb-2"
         >Upload Profile Picture</a>

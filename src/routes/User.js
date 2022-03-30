@@ -21,6 +21,9 @@ const User          = require('../model/UserMongoDB');
 router.get('/login', (req, res) => res.render('login'));
 // Register
 router.get('/register', (req, res) => res.render('register'));
+//neo4j
+const dbNeo4j = require('../dbaccess/neo4j')
+
 // Register Handle
 router.post('/register', async (req, res) =>{
     
@@ -84,6 +87,8 @@ router.post('/register', async (req, res) =>{
                     'success_msg',
                     'You are now registered and can log in'
                   );
+                   dbNeo4j.addUser(name, email)
+                  dbNeo4j.addUser(name, email)
                   res.redirect('/User/login');
                 })
                 .catch(err => console.log(err));
@@ -98,6 +103,7 @@ router.post('/register', async (req, res) =>{
       let sql_2 = `insert into profilepic (email_user, image) values ('${email}', '');`;
       const result_2 = await Factory(sql_2);
     }
+    
   });
   
 // Login

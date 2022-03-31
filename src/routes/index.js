@@ -108,10 +108,49 @@ router.get('/view-comments/:id', async (req, res) => {
         if(midQuery[i].idMySQL == idSearched)
             listaComentarios[i] = midQuery[i]
     }
-    console.log(listaComentarios)
     res.render('view-comments.hbs', {comentarios: listaComentarios, idSearched: idSearched});
 });
 
+router.get('/view-responses/:id', async (req, res) => {
+    const querySnapshot = await db.collection('Respuestas').get();
+    const midQuery = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+
+            }));
+    const idSearched = req.params.id
+    var listaRespuestas = []
+    console.log("El id " + idSearched)
+    console.log(midQuery[0])
+    for(i=0; i<midQuery.length; i++){
+        if(midQuery[i].idComentario == idSearched)
+            listaRespuestas[i] = midQuery[i]
+    }
+    res.render('view-responses.hbs', {responses: listaRespuestas, idSearched: idSearched});
+});
+
+router.get('/write-response/:id', async (req, res) => {
+    const id = req.params.id
+    res.render('new-response.hbs', {id});
+
+});
+
+router.post('/new-response/:id', ensureAuthenticated, async (req, res) =>{
+
+    const responseID = req.params.id
+    _remitente = req.user.email
+    console.log(_remitente)
+    const _timeStamp = Date.now()
+    const { mensaje, remitente = _remitente, response = responseID, fecha = _timeStamp} = req.body
+
+    await db.collection('Respuestas').add({
+        remitente: remitente,
+        Comentario: mensaje,
+        idComentario: response,
+        fecha: fecha,
+    });
+    res.redirect('/posts/othersPosts')
+});
 
 router.get('/edit-message/:id', async (req, res) =>{
     const doc = await db.collection("Mensajes").doc(req.params.id).get();

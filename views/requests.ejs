@@ -1,0 +1,66 @@
+<h1 class="text-center mb-3"><i></i> <%= user.name %>'s Requests</h1>
+<div>
+  <% if (response.requests.length > 0) { %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Accept</th>
+        <th scope="col">Reject</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for(var i = 0; i < response.requests.length; i++) { %>
+
+      <tr>
+        <th scope="row"><%= i + 1 %></th>
+        <td><%=response.requests[0].name%></td>
+        <td>
+          <form action="/friends/accept" method="POST">
+            <div class="input-group">
+                <input type = "hidden" name = "guid2" value = "<%= response.requests[i].requester %>" />
+                <input type = "hidden" name = "guid" value = "<%= user.email %>" />
+
+              <div class="input-group-append">
+                <button
+                  class="btn btn-primary btn-block mb-2"
+                  id="searchBTN"
+                  type="submit"
+                >
+                  Accept
+                </button>
+              </div>
+            </div>
+          </form>
+        </td>
+        <td>
+          <form action="/friends/reject" method="POST">
+            <div class="input-group">
+              <input type = "hidden" name = "guid2" value = "<%= response.requests[i].requester %>" />
+              <input type = "hidden" name = "guid" value = "<%= user.email %>" />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-primary btn-block mb-2"
+                  id="searchBTN"
+                  type="submit"
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p class="lead mb-3" class="rounded mx-auto d-block" alt="...">
+    There are not requests, sorry :(
+  </p>
+  <% } %>
+  <div>
+    <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
+  </div>
+</div>

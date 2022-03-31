@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/mysqlDB');
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
-const {newDocument, newImage, newVideo, newPost, getAllPosts} = require('../dbaccess/mysql_data');
+const {newDocument, newImage, newVideo, newPost, deletePost} = require('../dbaccess/mysql_data');
 const storage = require('../config/multer');
 const multer = require('multer');
 const path = require('path')
@@ -15,34 +15,52 @@ router.get('/create', ensureAuthenticated, (req, res) => {
 });
 router.post('/create', newPost);
 
-
-// Add Images
-router.get('/create/addImages', ensureAuthenticated, (req, res) => {
-  res.render('postAddImages', { user: req.user });
+// Create Images
+router.get('/create/addImages/:id', ensureAuthenticated, (req, res) => {
+  res.render('postAddImages', { id: req.params.id });
 }); 
-router.post('/create/addImages', upload.array('images'), newImage);
+router.post('/create/addImages/:id', upload.array('images'), newImage);
 
-// Add Videos
-router.get('/create/addVideos', ensureAuthenticated, (req, res) => {
-  res.render('postAddVideos', { user: req.user });
+// Create Videos
+router.get('/create/addVideos/:id', ensureAuthenticated, (req, res) => {
+  res.render('postAddVideos', { id: req.params.id });
 }); 
-router.post('/create/addVideos', upload.array('videos'), newVideo);
+router.post('/create/addVideos/:id', upload.array('videos'), newVideo);
 
-// Add Documents
-router.get('/create/addDocuments', ensureAuthenticated, (req, res) => {
-  res.render('postAddDocuments', { user: req.user });
+// Create Documents
+router.get('/create/addDocuments/:id', ensureAuthenticated, (req, res) => {
+  res.render('postAddDocuments', { id: req.params.id });
 }); 
-router.post('/create/addDocuments', upload.array('documents'), newDocument);
+router.post('/create/addDocuments/:id', upload.array('documents'), newDocument);
 
+// Delete Post
+router.post('/delete/:id', ensureAuthenticated, deletePost);
 
 // My Posts
-router.get('/myPosts', (req, res) => res.render('myPosts', { user: req.user }));
+router.get('/myPosts', ensureAuthenticated, async(req, res) => {
+  // Posts
+  let sql_posts = `select * from post where email_user = '${req.user.email}';`;
+  const posts= await Factory(sql_posts);
+
+  // Images
+  let sql_images = `SELECT distinct image, id_post FROM image inner join post on post.email_user = '${req.user.email}';`;
+  const images = await Factory(sql_images);
+
+  // Videos
+  let sql_videos = `SELECT distinct video, id_post FROM video inner join post where post.email_user = '${req.user.email}';`;
+  const videos = await Factory(sql_videos);
+
+  // Documents
+  let sql_documents = `SELECT distinct document, id_post FROM document inner join post where post.email_user = '${req.user.email}';`;
+  const documents = await Factory(sql_documents);
+
+  res.render('myPosts', {posts: posts, images: images, videos: videos, documents: documents});
+});
 
 
 // Other's Posts
 router.get('/othersPosts', ensureAuthenticated, async (req, res) => {
   // Get all posts
-  
   let sql_posts = 'select * from post';
   const posts= await Factory(sql_posts);
 
@@ -58,11 +76,8 @@ router.get('/othersPosts', ensureAuthenticated, async (req, res) => {
   let sql_documents = 'select * from document';
   const documents= await Factory(sql_documents);
   
-  res.render('othersPosts.ejs', { user: req.user, posts: posts, images:images, videos: videos, documents: documents})
+  res.render('othersPosts.ejs', { currentUser: req.user, posts: posts, images:images, videos: videos, documents: documents})
 });
-
-// Add Profile pic
-
 
 
 module.exports = router;

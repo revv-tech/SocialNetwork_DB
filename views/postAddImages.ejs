@@ -1,7 +1,7 @@
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
         <div class="card card-body">
-            <form action="/posts/create/addImages" method="POST" enctype="multipart/form-data">
+            <form action="/posts/create/addImages/<%= id %>"" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <h5>Select Photos:</h5>
                     <input type="file" id="images" name="images" multiple/>
@@ -12,6 +12,6 @@
             </form>
         </div>
         <p></p>
-        <a href="/posts/myPosts" class="btn btn-primary btn-block mb-2">Finish</a>
+        <a href="/posts/myPosts" class="btn btn-primary btn-block mb-2">No Upload Images and Finish</a>
     </div>
 </div>

@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const{connection, Factory} = require('../Factory/query_factory');
 
 //Agregado Steven
 const User          = require('../model/UserMongoDB');
@@ -15,8 +16,10 @@ var _post = 0
 // Welcome Page
 router.get('/', (req, res) => res.render('welcome'));
 // Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) => { 
-    res.render('dashboard', { user: req.user });
+router.get('/dashboard', ensureAuthenticated, async (req, res) => { 
+    let sql_pp = `SELECT * FROM profilepic where email_user = '${req.user.email}';`;
+    const pp = await Factory(sql_pp);
+    res.render('dashboard', { user: req.user, pp: pp[0].image });
 });
 
 

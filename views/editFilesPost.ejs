@@ -1,0 +1,53 @@
+<div class="container p-5">
+    <h1 class="text-center mb-3">
+        <i class="fas fa-home fa"></i> My Posts
+    </h1>
+    <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
+            <div class="center-text">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5> <%= post.text %></h5>
+                        
+                        <h3>Photos</h3>
+                        <div>
+                            <% var imagesUser = images; %>
+                            <% for(var j = 0; j < imagesUser.length; j++) { %>
+                                <img src= '<%=  imagesUser[j].image %>' width="350" height="350">
+                                <div class="form-group">
+                                    <a class="btn btn-secondary" href="/posts/deleteImage/<%= post.id %>/<%=  imagesUser[j].id %>"> Delete Image </a>
+                                </div>  
+                            <% } %>
+                        </div>
+
+                        <h3>Videos</h3>
+                        <div>
+                            <% var videosUser = videos; %>
+                            <% for(var j = 0; j < videosUser.length; j++) { %>
+                                <video controls width="350" height="350">
+                                    <source src = "<%=  videosUser[j].video %>">
+                                </video>
+                                <div class="form-group">
+                                    <a class="btn btn-secondary" href="/posts/deleteVideo/<%= post.id %>/<%=  videosUser[j].id %>"> Delete Video </a>
+                                </div>  
+                            <% } %>
+                        </div>
+
+                        <h3>Documents</h3>
+                        <div>
+                            <% var documentsUser = documents; %>
+                            <% for(var j = 0; j < documentsUser.length; j++) { %>
+                                <embed src="<%=  documentsUser[j].document %>" type="application/pdf" width="350" height="350">
+                                    <div class="form-group">
+                                        <a class="btn btn-secondary" href="/posts/deleteDocument/<%= post.id %>/<%=  documentsUser[j].id %>"> Delete Document </a>
+                                    </div>  
+                            <% } %>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger" > Delete Post </button>
+                        </div>    
+                        <a class="btn btn-secondary" href="/posts/create/addImages/<%= post.id %>"> Add Files </a>
+                    </div>
+                </div>
+            </div>
+</div>

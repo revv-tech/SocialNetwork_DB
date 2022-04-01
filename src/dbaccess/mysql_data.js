@@ -3,6 +3,7 @@ const storage = require('../config/multer');
 const multer = require('multer');
 const path = require('path')
 const upload = multer({storage});
+const fs = require('fs').promises
 
 // Profile Pic Upload
 async function newImagePP(req, res, email){
@@ -33,10 +34,9 @@ async function newImagePPUpdate(req, res){
     }
 }
 
-// Creates
+// New Image
 async function newImage(req, res){
     const {files} = req;
-    console.log(req.params.id);
     if(files){
         for (const file of files) {
             let url = `http://localhost:5000/images/${file.filename}`
@@ -49,6 +49,8 @@ async function newImage(req, res){
     }
 }
 
+
+// New Document
 async function newVideo(req, res){
     const {files} = req;
     if(files) {
@@ -63,6 +65,7 @@ async function newVideo(req, res){
     }
 }
 
+// New Documents
 async function newDocument(req, res){
     const {files} = req;
     if(files) {
@@ -77,6 +80,7 @@ async function newDocument(req, res){
     }
 }
 
+// New Post
 async function newPost(req, res){
     const{description, isPublic, email} = req.body;
     var is_public = false;
@@ -88,6 +92,65 @@ async function newPost(req, res){
     sql = `select max(id) id from post;`;
     result = await Factory(sql);
     res.redirect('/posts/create/addImages/' + result[0].id)
+}
+
+// Delete Image
+async function deleteImage(req, res){
+    let sql = `Select image FROM image WHERE id = ${req.params.idImage};`;
+    var imageResult = await Factory(sql);
+    sql = `DELETE FROM image WHERE id = ${req.params.idImage};`;
+    var result = await Factory(sql);
+    var image = imageResult[0].image.split('/')[imageResult[0].image.split('/').length-1];
+    fs.unlink('./static/images/' + image, (error) => {
+        if(error){
+            console.log(`Error: ${error}`)
+        }
+    });
+    res.redirect('/posts/editFiles/' + req.params.idPost)
+}
+
+// Delete Video
+async function deleteVideo(req, res){
+    let sql = `Select video FROM video WHERE id = ${req.params.idVideo};`;
+    var videoResult = await Factory(sql);
+    sql = `DELETE FROM video WHERE id = ${req.params.idVideo};`;
+    var result = await Factory(sql);
+    var video = videoResult[0].video.split('/')[videoResult[0].video.split('/').length-1];
+    fs.unlink('./static/videos/' + video, (error) => {
+        if(error){
+            console.log(`Error: ${error}`)
+        }
+    });
+    res.redirect('/posts/editFiles/' + req.params.idPost)
+}
+
+// Delete Document
+async function deleteDocument(req, res){
+    let sql = `Select document FROM document WHERE id = ${req.params.idDocument};`;
+    var documentResult = await Factory(sql);
+    sql = `DELETE FROM document WHERE id = ${req.params.idDocument};`;
+    var result = await Factory(sql);
+    var document = documentResult[0].document.split('/')[documentResult[0].document.split('/').length-1];
+    fs.unlink('./static/documents/' + document, (error) => {
+        if(error){
+            console.log(`Error: ${error}`)
+        }
+    });
+    res.redirect('/posts/editFiles/' + req.params.idPost)
+}
+
+// Edit Post
+async function editPost(req, res){
+    const{description, isPublic, email} = req.body;
+    var is_public = false;
+    if (isPublic == 'on'){
+        is_public = true;
+    }
+    let sql = `UPDATE post SET text = '${description}' WHERE id = ${req.params.id};`;
+    var result = await Factory(sql);
+    sql = `UPDATE post SET is_public = ${is_public} WHERE id = ${req.params.id};`;
+    result = await Factory(sql);
+    res.redirect('/posts/editFiles/' + req.params.id)
 }
 
 // Delete Posts
@@ -105,5 +168,9 @@ module.exports = {
     newPost,
     newImagePP,
     newImagePPUpdate,
-    deletePost
+    deletePost,
+    editPost,
+    deleteImage,
+    deleteVideo,
+    deleteDocument
 };

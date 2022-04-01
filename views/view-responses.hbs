@@ -1,13 +1,11 @@
-<h1>Comentarios</h1>
+<h1>Responses</h1>
 
 <ul>
-    {{#each comentarios}}
+    {{#each responses}}
     <li>
         <h3>{{remitente}} {{Comentario}}</h3>
         <p>{{prettifyDate fecha}}</p>        
     </li>
-    <a href="/view-responses/{{id}}" class="btn btn-secondary btn-block">View Responses</a>
-    <a href="/write-response/{{id}}" class="btn btn-secondary btn-block">New Response</a>
     {{/each}}
 </ul>
 

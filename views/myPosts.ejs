@@ -1,46 +1,55 @@
 <div class="container p-5">
+    <h1 class="text-center mb-3">
+        <i class="fas fa-home fa"></i> My Posts
+    </h1>
     <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
-    <div class="row">
-        {{#each links}}
-        <div class="col-md-10">
-            <div class="card text-center">
-                <div class="card-body">
-                    <p class="m-2">{{description}}</p>
-                    <h3>Photos</h3>
-                    <div>
-                        <img src="../static/images/image1648330290568.jpeg" width="350" height="350">
-                        <img src="../static/images/image1648330290568.jpeg" width="350" height="350">
-                        <img src="../static/images/image1648330290568.jpeg" width="350" height="350">
+        <% var postsUser = posts; %>
+        <% for(var i = 0; i < postsUser.length; i++) { %>
+            <form action="/posts/delete/<%=  postsUser[i].id %>" method="POST"></form>
+            <div class="center-text">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5> <%= postsUser[i].text %></h5>
+                        
+                        <h3>Photos</h3>
+                        <div>
+                            <% var imagesUser = images; %>
+                            <% for(var j = 0; j < imagesUser.length; j++) { %>
+                                <% if (imagesUser[j].id_post == postsUser[i].id) {%>
+                                    <img src= '<%=  imagesUser[j].image %>' width="350" height="350">
+                                <% } %>
+                            <% } %>
+                        </div>
+
+                        <h3>Videos</h3>
+                        <div>
+                            <% var videosUser = videos; %>
+                            <% for(var j = 0; j < videosUser.length; j++) { %>
+                                <% if (videosUser[j].id_post == postsUser[i].id) {%>
+                                    <video controls width="350" height="350">
+                                        <source src = "<%=  videosUser[j].video %>">
+                                    </video>
+                                <% } %>
+                            <% } %>
+                        </div>
+
+                        <h3>Documents</h3>
+                        <div>
+                            <% var documentsUser = documents; %>
+                            <% for(var j = 0; j < documentsUser.length; j++) { %>
+                                <% if (documentsUser[j].id_post == postsUser[i].id) {%>
+                                    <embed src="<%=  documentsUser[j].document %>" type="application/pdf" width="350" height="350">
+                                <% } %>
+                            <% } %>
+                        </div>
+
+                        <div class="form-group">
+                            <a class="btn btn-secondary" href="/posts/deletePost/<%= postsUser[i].id %>"> Delete Post </a>
+                        </div>    
+                        <a class="btn btn-secondary" href="/posts/edit/<%=  postsUser[i].id %>"> Edit Post </a>
                     </div>
-                    <h3>Videos</h3>
-                    <div>
-                        <video controls width="350" height="350">
-                            <source src = '../static/videos/video1648330596013.mp4'>
-                        </video>
-                        <video controls width="350" height="350">
-                            <source src = '../static/videos/video1648330596013.mp4'>
-                        </video>
-                        <video controls width="350" height="350"></video>
-                            <source src = '../static/videos/video1648330596013.mp4'>
-                        </video>
-                    </div>
-                    <h3>Documents</h3>
-                    <div>
-                        <embed src="../static/documents/document1648331442590.pdf" type="application/pdf" width="350" height="350">
-                        <embed src="../static/documents/document1648331442590.pdf" type="application/pdf" width="350" height="350">
-                        <embed src="../static/documents/document1648331442590.pdf" type="application/pdf" width="350" height="350">
-                    </div>
-                    <p></p>
-                    <a class="btn btn-danger" href="/posts/delete/{{id}}">
-                        Delete Post
-                    </a>
-                    <a class="btn btn-secondary" href="/posts/edit/{{id}}">
-                        Edit Post
-                    </a>
                 </div>
             </div>
-        </div>
-        {{else}}
-        {{/each}}
-    </div>
+            </form>
+        <% } %>
 </div>

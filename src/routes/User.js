@@ -166,7 +166,7 @@ router.post('/settings', ensureAuthenticated, (req, res) => {
         interestsPrivate: isinterestsPublic
       }
       }).then(
-      res.redirect('/User/settings')
+      res.redirect('/User/updateProfilePic')
     );
   } if ( password || password2) {
       if ( password == password2) {
@@ -180,14 +180,14 @@ router.post('/settings', ensureAuthenticated, (req, res) => {
                 password: encryptedPass
               }
               }).then(
-              res.redirect('/User/settings')
+              res.redirect('/User/updateProfilePic')
             );
           });
         });
 
         
     }else{
-      res.redirect('/User/settings');
+      res.redirect('/User/updateProfilePic');
     }
   }
   

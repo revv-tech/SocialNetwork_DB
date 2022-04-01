@@ -5,39 +5,52 @@
     <a href="/dashboard" class="btn btn-primary btn-block mb-2">Back to feed</a>
         <% var postsUser = posts; %>
         <% for(var i = 0; i < postsUser.length; i++) { %>
+            <% if (postsUser[i].is_public) {%>
             <div class="center-text">
                 <div class="card text-center">
                     <div class="card-body">
                         <h2 class="card-title text-uppercase">
-                            <%=  user.email %>
+                            <%=  postsUser[i].email_user %>
                         </h2>
                         <h5> <%= postsUser[i].text %></h5>
                         
-                            <h3>Photos</h3>
-                        <div class="slides">
-                            <img src="viego-pentakill-2021.JPG" width="800" height="800">
+                        <h3>Photos</h3>
+                        <div>
+                            <% var imagesUser = images; %>
+                            <% for(var j = 0; j < imagesUser.length; j++) { %>
+                                <% if (imagesUser[j].id_post == postsUser[i].id) {%>
+                                    <img src= '<%=  imagesUser[j].image %>' width="350" height="350">
+                                <% } %>
+                            <% } %>
                         </div>
-                        <!-- 
+
                         <h3>Videos</h3>
-                        <div class="slides">
-                            <img src="https://www.nationalgeographic.com.es/medio/2018/02/27/playa-de-isuntza-lekeitio__1280x720.jpg" width="350" height="350">
-                            <img src="https://mott.pe/noticias/wp-content/uploads/2019/03/los-50-paisajes-maravillosos-del-mundo-para-tomar-fotos.jpg" width="350" height="350">
-                            <img src="https://static.dw.com/image/58845200_303.jpg" width="350" height="350">
+                        <div>
+                            <% var videosUser = videos; %>
+                            <% for(var j = 0; j < videosUser.length; j++) { %>
+                                <% if (videosUser[j].id_post == postsUser[i].id) {%>
+                                    <video controls width="350" height="350">
+                                        <source src = "<%=  videosUser[j].video %>">
+                                    </video>
+                                <% } %>
+                            <% } %>
                         </div>
+
                         <h3>Documents</h3>
-                        <div class="slides">
-                            <img src="https://www.nationalgeographic.com.es/medio/2018/02/27/playa-de-isuntza-lekeitio__1280x720.jpg" width="350" height="350">
-                            <img src="https://mott.pe/noticias/wp-content/uploads/2019/03/los-50-paisajes-maravillosos-del-mundo-para-tomar-fotos.jpg" width="350" height="350">
-                            <img src="https://static.dw.com/image/58845200_303.jpg" width="350" height="350">
+                        <div>
+                            <% var documentsUser = documents; %>
+                            <% for(var j = 0; j < documentsUser.length; j++) { %>
+                                <% if (documentsUser[j].id_post == postsUser[i].id) {%>
+                                    <embed src="<%=  documentsUser[j].document %>" type="application/pdf" width="350" height="350">
+                                <% } %>
+                            <% } %>
                         </div>
-                        -->
+
                         <a href="/view-comments/<%= postsUser[i].id %>" class="btn btn-secondary btn-block">View Comment</a>
                         <a href="/write-comment/<%= postsUser[i].id %>" class="btn btn-secondary btn-block">New Comment</a>
-                        <div class="'form-group">
-                            <input id="id_post" name="id_post" type="hidden" value="<%= user.email %>">
-                        </div>
                     </div>
                 </div>
             </div>
+            <% } %>
         <% } %>
 </div>

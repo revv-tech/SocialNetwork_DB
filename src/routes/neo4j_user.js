@@ -1,6 +1,7 @@
 const express       = require('express');
 const router        = express.Router();
 const db = require('../dbaccess/neo4j')
+const mysqldb = require('../dbaccess/mysql_data')
 //mongodb
 const User          = require('../model/UserMongoDB');
 
@@ -37,6 +38,7 @@ async function find (req, res) {
     find_aux(guidFind, req.user, res)
 }
 
+//guid is email
 async function find_aux (guid, user, res) {
     let errors = [];
     if (!guid) {
@@ -44,14 +46,19 @@ async function find_aux (guid, user, res) {
         res.render('dashboard.ejs', {user: user, err: errors})
     } else {
 
+        //search user on neo4j and assumes that exists in other dv
         const response = await db.findUser(guid)
         response.user = {}
+        //verify if has friends
         response2 = await db.areFriends(guid, user.email)
 
+        //or if logged user already send a request
         isRequestResp = await db.isRequest(user.email, guid)
         //crear metodo areFriends, para saber que botón colocar
         //request friendship or remove
         if (response.success){
+            photo = mysqldb.getProfilePic(guid)
+
             await User.findOne({ email: guid }).then(userFound => {
                 response.user.name = userFound.name
                 response.user.email = userFound.emailPrivate ? userFound.email : "is private"
@@ -77,7 +84,7 @@ async function find_aux (guid, user, res) {
                 response.areFriends = response2.areFriends
                 response.isRequest = isRequestResp.isRequest
                 response.emailReq = guid
-                res.render('user.ejs', {response : response, user : user});
+                res.render('user.ejs', {response : response, user : user, photo: photo});
             })
             
         } else {

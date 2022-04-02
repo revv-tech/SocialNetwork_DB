@@ -3,7 +3,9 @@
 </h1>
 <% if (!response.user.imagePrivate) {%>
     <p class="text-center">
-        <img src="/images/image1648444738473.jpeg" width="200" height="200" alt="centered image">
+        <% if (image != null ) {%>
+            <img src='<%=  imagesUser[0].image %>' width="200" height="200" alt="centered image">
+        <% } %>
     </p>
 <% } %>
 

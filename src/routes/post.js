@@ -8,6 +8,8 @@ const multer = require('multer');
 const path = require('path')
 const upload = multer({storage});
 const{connection, Factory} = require('../Factory/query_factory');
+const neo4jdb = require('../dbaccess/neo4j');
+const { response } = require('express');
 
 // Delete Post
 router.get('/deletePost/:id', deletePost);
@@ -96,5 +98,33 @@ router.get('/othersPosts', ensureAuthenticated, async (req, res) => {
   const documents= await Factory(sql_documents);
   res.render('othersPosts.ejs', { currentUser: req.user, posts: posts, images:images, videos: videos, documents: documents})
 });
+
+
+router.post('/friendsFeed', (req, res) => friendsFeed(req, res));
+async function friendsFeed (req, res) {
+  const {email} = req.body;
+  //obtener lista de amigos
+  response = neo4jdb.findFriends(email)
+  //concatena en en un str los email de amigos
+  let listStr = "("
+  response.response.forEach(element => {
+      listStr += "\'" + element.guid + "\',"
+  });
+  listStr += ")"
+
+
+  //queries
+  let sql_posts = "select * from post where email_user in " + listStr + ";";
+  const posts= await Factory(sql_posts);
+  let sql_images = "SELECT distinct image, id_post FROM image inner join post on post.email_user in " + listStr + ";";
+  const images = await Factory(sql_images);
+  let sql_videos = "SELECT distinct video, id_post FROM video inner join post where post.email_user in " + listStr + ";";
+  const videos = await Factory(sql_videos);
+  let sql_documents = "SELECT distinct document, id_post FROM document inner join post where post.email_user in " + listStr + ";";
+  const documents = await Factory(sql_documents);
+
+  
+  res.render('feed', { currentUser: req.user, posts: posts, images:images, videos: videos, documents: documents});
+}
 
 module.exports = router;

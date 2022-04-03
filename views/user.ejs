@@ -3,8 +3,8 @@
 </h1>
 <% if (!response.user.imagePrivate || response.areFriends) {%>
     <p class="text-center">
-        <% if (image != null ) {%>
-            <img src='<%=  imagesUser[0].image %>' width="200" height="200" alt="centered image">
+        <% if (photo != null ) {%>
+            <img src='<%=  photo[0].image %>' width="200" height="200" alt="centered image">
         <% } %>
     </p>
 <% } %>

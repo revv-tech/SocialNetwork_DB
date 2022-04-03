@@ -104,15 +104,14 @@ router.post('/friendsFeed', (req, res) => friendsFeed(req, res));
 async function friendsFeed (req, res) {
   const {email} = req.body;
   //obtener lista de amigos
-  let response = neo4jdb.findFriends(email)
+  let response = await  neo4jdb.findFriends(email)
   //concatena en en un str los email de amigos
   let listStr = "(\'\'" //agragar un email vacio por si el mae no tiene amigos
   for (let index = 0; index < response.response.length; index++) {
     listStr += "\'" + response.response[index].guid + "\'"
     if (! index + 1 == response.response.length) {//cuando no sea el ultimo
       listStr += ","
-    }
-    
+    } 
   }
   listStr += ")"
 

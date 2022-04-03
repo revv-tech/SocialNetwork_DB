@@ -57,7 +57,7 @@ async function find_aux (guid, user, res) {
         //crear metodo areFriends, para saber que botón colocar
         //request friendship or remove
         if (response.success){
-            photo = mysqldb.getProfilePic(guid)
+            photo = await mysqldb.getProfilePic(guid)
 
             await User.findOne({ email: guid }).then(userFound => {
                 response.user.name = userFound.name

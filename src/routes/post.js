@@ -108,10 +108,10 @@ async function friendsFeed (req, res) {
   //concatena en en un str los email de amigos
   let listStr = "(\'\'" //agragar un email vacio por si el mae no tiene amigos
   for (let index = 0; index < response.response.length; index++) {
-    listStr += "\'" + response.response[index].guid + "\'"
-    if (! index + 1 == response.response.length) {//cuando no sea el ultimo
+    listStr += ",\'" + response.response[index].guid + "\'"
+/*     if (! index + 1 == response.response.length) {//cuando no sea el ultimo
       listStr += ","
-    } 
+    }  */
   }
   listStr += ")"
 

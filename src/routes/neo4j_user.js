@@ -62,10 +62,12 @@ async function find_aux (guid, user, res) {
             await User.findOne({ email: guid }).then(userFound => {
                 response.user.name = userFound.name
                 //setea el valuer
-                response.user.email = !userFound.emailPrivate && !response2.areFriends ? userFound.email : "is private"
-                response.user.description = !userFound.descriptionPrivate && !response2.areFriends ? userFound.description : "is private"
-                response.user.date = !userFound.datePrivate && !response2.areFriends ? userFound.date : "is private"
-                response.user.imagePrivate = userFound.imagePrivate
+                response.user.email = userFound.emailPrivate && !response2.areFriends ?  "is private" : userFound.email
+                response.user.description = userFound.descriptionPrivate && !response2.areFriends ? "is private" : userFound.description
+                response.user.date = userFound.datePrivate && !response2.areFriends ? "is private" : userFound.date
+
+                response.user.imagePrivate = !userFound.imagePrivate && response2.areFriends
+
                 //si es privado y cuando no sean amigos
                 // pero si fueran amigos, si se muestra
                 if (userFound.interestsPrivate && !response2.areFriends) {
@@ -92,7 +94,8 @@ async function find_aux (guid, user, res) {
             
         } else {
             errors.push({ msg: 'User not found' });
-            res.redirect('dashboard.ejs', {user: user, err: errors})
+            photo = await mysqldb.getProfilePic(user.email)
+            res.render('dashboard.ejs', {user: user, pp : photo[0].image})
         }
     }
 }

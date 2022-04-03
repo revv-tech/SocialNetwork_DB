@@ -42,7 +42,12 @@
                                 <% } %>
                             <% } %>
                         </div>
-
+                        <div>
+                        <a href="/view-comments/<%= postsUser[i].id %>" class="btn btn-secondary btn-block">View Comment</a>
+                        
+                        <a href="/write-comment/<%= postsUser[i].id %>" class="btn btn-secondary btn-block">New Comment</a>
+                        </div>
+                        <p></p><p></p>
                         <div class="form-group">
                             <a class="btn btn-secondary" href="/posts/deletePost/<%= postsUser[i].id %>"> Delete Post </a>
                         </div>    

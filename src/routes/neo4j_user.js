@@ -66,7 +66,7 @@ async function find_aux (guid, user, res) {
                 response.user.description = userFound.descriptionPrivate && !response2.areFriends ? "is private" : userFound.description
                 response.user.date = userFound.datePrivate && !response2.areFriends ? "is private" : userFound.date
 
-                response.user.imagePrivate = !userFound.imagePrivate && response2.areFriends
+                response.user.imagePrivate = userFound.imagePrivate
 
                 //si es privado y cuando no sean amigos
                 // pero si fueran amigos, si se muestra

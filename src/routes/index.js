@@ -32,9 +32,10 @@ router.get('/chats', ensureAuthenticated, (req, res) => {
 
 
 router.get('/conversation', async (req, res) => {
-    const querySnapshot = await db.collection('Mensajes').orderBy("numero", "asc").get();
+    const querySnapshot = await db.collection('Mensajes').orderBy("numero", "desc").get();
     _numMensajes = querySnapshot.size + 1;
     _receptor = req.query.receptor
+    _remitente = req.user.email
 
     if(_receptor == _remitente)
     res.redirect('/chats')
@@ -61,7 +62,10 @@ router.get('/conversation', async (req, res) => {
 router.post('/new-message', async (req, res) =>{
 
     const _timeStamp = Date.now()
+    //_remitente = req.user.email
     const { mensaje, remitente = _remitente, receptor = _receptor, fecha = _timeStamp, numero = _numMensajes} = req.body
+
+    
 
     await db.collection('Mensajes').add({
         remitente: remitente,

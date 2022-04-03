@@ -127,14 +127,14 @@ router.get('/settings', ensureAuthenticated,  async (req, res) => {
 });
 // Settings Handler
 router.post('/settings', ensureAuthenticated, (req, res) => {
-  const { name, email, emailPrivate , password, password2, description, descriptionPrivate , date, datePrivate, hoobies, hoobiesPrivate, interests, interestsPrivate} = req.body;
+  const { name, email, emailPrivate , password, password2, description, descriptionPrivate , date, datePrivate, hoobies, hoobiesPrivate, interests, interestsPrivate, imagePrivate} = req.body;
   var isEmailPublic = false;
   var isDescriptionPublic = false;
   var isDatePublic = false;
   var ishoobiesPublic = false;
   var isinterestsPublic = false;
-  
-  
+  var isImagePublic = false;
+
   if (emailPrivate == 'on'){
     isEmailPublic = true;
   }
@@ -150,6 +150,9 @@ router.post('/settings', ensureAuthenticated, (req, res) => {
   if (interestsPrivate == 'on'){
     isinterestsPublic = true;
   }
+  if (imagePrivate == 'on'){
+    isImagePublic = true;
+  }
   
   if ( !password && !password2) {
     User.updateOne({email: email}, {
@@ -163,10 +166,11 @@ router.post('/settings', ensureAuthenticated, (req, res) => {
         hoobies: hoobies,
         hoobiesPrivate: ishoobiesPublic,
         interests: interests,
-        interestsPrivate: isinterestsPublic
+        interestsPrivate: isinterestsPublic,
+        imagePrivate: isImagePublic
       }
       }).then(
-      res.redirect('/User/updateProfilePic')
+      res.redirect('/dashboard')
     );
   } if ( password || password2) {
       if ( password == password2) {
@@ -180,14 +184,14 @@ router.post('/settings', ensureAuthenticated, (req, res) => {
                 password: encryptedPass
               }
               }).then(
-              res.redirect('/User/updateProfilePic')
+              res.redirect('/dashboard')
             );
           });
         });
 
         
     }else{
-      res.redirect('/User/updateProfilePic');
+      res.redirect('/settings');
     }
   }
   

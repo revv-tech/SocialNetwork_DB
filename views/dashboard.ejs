@@ -33,6 +33,14 @@
         
 </form>
 
+<form action="/posts/friendsFeed" method="POST">
+        <input type = "hidden" name = "email" value = "<%= user.email %>" />
+        <div class="input-group-append">
+                <button class="btn btn-primary btn-block mb-2" id="searchBTN" type="submit">Feed</button>
+        </div>
+        
+</form>
+
 
 <a href="/User/updateProfilePic" class="btn btn-primary btn-block mb-2"
         >Upload Profile Picture</a>

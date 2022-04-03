@@ -161,6 +161,14 @@ async function deletePost(req, res){
 }
 
 
+// get profile pic Posts
+async function getProfilePic(email){
+    let sql = `SELECT image FROM profilepic WHERE email_user = \'${email}\' Limit 1;`;
+    var photo = await Factory(sql);
+    return photo
+}
+
+
 module.exports = {
     newImage, 
     newVideo, 
@@ -172,5 +180,6 @@ module.exports = {
     editPost,
     deleteImage,
     deleteVideo,
-    deleteDocument
+    deleteDocument,
+    getProfilePic
 };

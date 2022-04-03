@@ -1,7 +1,7 @@
 <h1 class="text-center mb-3">
     <i></i> <%= response.user.name %>'s Profile 
 </h1>
-<% if (!response.user.imagePrivate) {%>
+<% if (!response.user.imagePrivate || response.areFriends) {%>
     <p class="text-center">
         <% if (image != null ) {%>
             <img src='<%=  imagesUser[0].image %>' width="200" height="200" alt="centered image">

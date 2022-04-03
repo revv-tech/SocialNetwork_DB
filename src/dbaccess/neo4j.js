@@ -134,6 +134,7 @@ async function findFriends (guid) {
         const readResult = await session.readTransaction(tx =>
             tx.run(readQuery, { guid })
         )
+     
         readResult.records.forEach(record => {
             const item = {} 
             item.guid = record.get('guid')

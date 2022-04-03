@@ -50,7 +50,7 @@ async function find_aux (guid, user, res) {
         const response = await db.findUser(guid)
         response.user = {}
         //verify if has friends
-        response2 = await db.areFriends(guid, user.email)
+        let response2 = await db.areFriends(guid, user.email)
 
         //or if logged user already send a request
         isRequestResp = await db.isRequest(user.email, guid)
@@ -61,11 +61,14 @@ async function find_aux (guid, user, res) {
 
             await User.findOne({ email: guid }).then(userFound => {
                 response.user.name = userFound.name
-                response.user.email = userFound.emailPrivate ? userFound.email : "is private"
-                response.user.description = userFound.descriptionPrivate ? userFound.description : "is private"
-                response.user.date = userFound.datePrivate ? userFound.date : "is private"
+                //setea el valuer
+                response.user.email = !userFound.emailPrivate && !response2.areFriends ? userFound.email : "is private"
+                response.user.description = !userFound.descriptionPrivate && !response2.areFriends ? userFound.description : "is private"
+                response.user.date = !userFound.datePrivate && !response2.areFriends ? userFound.date : "is private"
                 response.user.imagePrivate = userFound.imagePrivate
-                if (userFound.interestsPrivate) {
+                //si es privado y cuando no sean amigos
+                // pero si fueran amigos, si se muestra
+                if (userFound.interestsPrivate && !response2.areFriends) {
                     response.user.interests = "are private"
                 } else {
                     response.user.interests = ""
@@ -73,7 +76,7 @@ async function find_aux (guid, user, res) {
                         response.user.interests += interest + "  "
                     });
                 }
-                if (userFound.hoobiesPrivate) {
+                if (userFound.hoobiesPrivate&& !response2.areFriends ) {
                     response.user.hoobies = "are private"
                 } else {
                     response.user.hoobies = ""
